@@ -17,6 +17,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         actix_web::App::new()
             .wrap(actix_web::middleware::Logger::default())
             .default_service(web::to(|| HttpResponse::NotFound()));
+            .default_service(web::to(|| HttpResponse::NotFound()))
     };
 
     Ok(())
