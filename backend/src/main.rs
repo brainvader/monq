@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
-use actix_web::{web, HttpResponse};
+use actix_web::{web, HttpResponse, HttpServer};
 
 #[actix_rt::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,12 +13,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let _addr = SocketAddr::new(ip, port);
 
     // actix-web application factory
-    let _app_factory = move || {
+    let app_factory = move || {
         actix_web::App::new()
             .wrap(actix_web::middleware::Logger::default())
-            .default_service(web::to(|| HttpResponse::NotFound()));
             .default_service(web::to(|| HttpResponse::NotFound()))
     };
+
+    let mut server = HttpServer::new(app_factory);
 
     Ok(())
 }
