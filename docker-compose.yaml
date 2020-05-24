@@ -1,0 +1,39 @@
+# Reference
+# https://www.elastic.co/guide/en/elastic-stack-get-started/current/get-started-docker.html
+# https://qiita.com/kiyokiyo_kzsby/items/344fb2e9aead158a5545
+# https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-node.html
+
+# Compose file version
+version: '3'
+services:
+    # ES Node
+    es01:
+        # https://hub.docker.com/_/elasticsearch?tab=reviews
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+        container_name: monq
+        environment:
+            # Node identifier
+            - node.name=monq
+            # Data node
+            - node.data=true
+            # signel node mode
+            - discovery.type=single-node
+            # - node.master=true
+            # - xpack.security.enabled=false
+            - bootstrap.memory_lock=true
+            # - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        volumes:
+            - monq:/usr/share/elasticsearch/data
+        # Port forwarding
+        ports:
+            - 9200:9200
+        ulimits:
+            memlock:
+                soft: -1
+                hard: -1
+
+# Named volume
+# https://knowledge.sakura.ad.jp/5021/
+volumes:
+    monq:
+        driver: local
