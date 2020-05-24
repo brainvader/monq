@@ -1,6 +1,7 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
 use actix_web::{web, HttpResponse, HttpServer};
+use listenfd::ListenFd;
 
 #[actix_rt::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -10,7 +11,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     assert_eq!(ip.is_loopback(), true);
 
     let port = 8080;
-    let _addr = SocketAddr::new(ip, port);
+    let addr = SocketAddr::new(ip, port);
 
     // actix-web application factory
     let app_factory = move || {
@@ -20,6 +21,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
     };
 
     let mut server = HttpServer::new(app_factory);
+    let mut listenfd = ListenFd::from_env();
 
-    Ok(())
+    server = if let Some(l) = listenfd.take_tcp_listener(0)? {
+        server.listen(l)?
+    } else {
+        server.bind(addr)?
+    };
+
+    server.run().await
 }
