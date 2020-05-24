@@ -4,7 +4,7 @@ use actix_web::{web, HttpResponse, HttpServer};
 use listenfd::ListenFd;
 
 #[actix_rt::main]
-async fn main() -> Result<(), Box<dyn std::error::Error>> {
+async fn main() -> std::io::Result<()> {
     // local loop back address
     let localhost = Ipv4Addr::new(127, 0, 0, 1);
     let ip = IpAddr::V4(localhost);
