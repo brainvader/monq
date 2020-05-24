@@ -3,6 +3,8 @@ use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use actix_web::{get, http, web, HttpResponse, HttpServer};
 use listenfd::ListenFd;
 
+use backend_lib::setup_logger;
+
 const ES_HOST: &'static str = "ES_HOST";
 const ES_PORT: &'static str = "ES_PORT";
 
@@ -25,8 +27,9 @@ async fn page_not_found() -> impl actix_web::Responder {
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
-    // local loop back address
+    setup_logger().expect("Failed to set up logger");
 
+    // local loop back address
     let host: String = dotenv::var(ES_HOST).expect("ES_HOST could not resolved");
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
     let ip = IpAddr::V4(localhost);
