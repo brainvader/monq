@@ -12,6 +12,14 @@ async fn hello_monq() -> impl actix_web::Responder {
         .body("Hello MonQ!")
 }
 
+async fn page_not_found() -> impl actix_web::Responder {
+    let mut builder = HttpResponse::NotFound();
+    let mime_type = http::header::ContentType::plaintext();
+    builder
+        .content_type(mime_type.to_string())
+        .body("404 Page Not Found")
+}
+
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     // local loop back address
@@ -27,7 +35,7 @@ async fn main() -> std::io::Result<()> {
         actix_web::App::new()
             .wrap(actix_web::middleware::Logger::default())
             .service(hello_monq)
-            .default_service(web::to(|| HttpResponse::NotFound()))
+            .default_service(web::route().to(page_not_found))
     };
 
     let mut server = HttpServer::new(app_factory);
