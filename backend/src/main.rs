@@ -3,6 +3,9 @@ use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 use actix_web::{get, http, web, HttpResponse, HttpServer};
 use listenfd::ListenFd;
 
+const ES_HOST: &'static str = "ES_HOST";
+const ES_PORT: &'static str = "ES_PORT";
+
 #[get("/hello-monq")]
 async fn hello_monq() -> impl actix_web::Responder {
     let mut builder = HttpResponse::Ok();
@@ -23,11 +26,14 @@ async fn page_not_found() -> impl actix_web::Responder {
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
     // local loop back address
-    let localhost = Ipv4Addr::new(127, 0, 0, 1);
+
+    let host: String = dotenv::var(ES_HOST).expect("ES_HOST could not resolved");
+    let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
     let ip = IpAddr::V4(localhost);
     assert_eq!(ip.is_loopback(), true);
 
-    let port = 8080;
+    let port = dotenv::var(ES_PORT).expect("ES_PORT could not resolved");
+    let port = port.parse::<u16>().unwrap();
     let addr = SocketAddr::new(ip, port);
 
     // actix-web application factory
