@@ -1,6 +1,6 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
-use actix_web::{get, http, web, HttpResponse, HttpServer};
+use actix_web::{web, HttpServer};
 use listenfd::ListenFd;
 
 use backend_lib::setup_logger;
@@ -8,22 +8,8 @@ use backend_lib::setup_logger;
 const ES_HOST: &'static str = "ES_HOST";
 const ES_PORT: &'static str = "ES_PORT";
 
-#[get("/hello-monq")]
-async fn hello_monq() -> impl actix_web::Responder {
-    let mut builder = HttpResponse::Ok();
-    let mime_type: http::header::ContentType = http::header::ContentType::plaintext();
-    builder
-        .content_type(mime_type.to_string())
-        .body("Hello MonQ!")
-}
-
-async fn page_not_found() -> impl actix_web::Responder {
-    let mut builder = HttpResponse::NotFound();
-    let mime_type = http::header::ContentType::plaintext();
-    builder
-        .content_type(mime_type.to_string())
-        .body("404 Page Not Found")
-}
+mod endpoints;
+use endpoints::{hello_monq, page_not_found};
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
