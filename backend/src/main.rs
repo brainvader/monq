@@ -9,7 +9,7 @@ const ES_HOST: &'static str = "ES_HOST";
 const ES_PORT: &'static str = "ES_PORT";
 
 mod endpoints;
-use endpoints::{hello_monq, page_not_found};
+use endpoints::{hello_monq, index, page_not_found};
 
 #[actix_rt::main]
 async fn main() -> std::io::Result<()> {
@@ -29,6 +29,7 @@ async fn main() -> std::io::Result<()> {
     let app_factory = move || {
         actix_web::App::new()
             .wrap(actix_web::middleware::Logger::default())
+            .service(index)
             .service(hello_monq)
             .default_service(web::route().to(page_not_found))
     };
