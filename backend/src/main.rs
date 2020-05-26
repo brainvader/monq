@@ -5,8 +5,8 @@ use listenfd::ListenFd;
 
 use backend_lib::setup_logger;
 
-const ES_HOST: &'static str = "ES_HOST";
-const ES_PORT: &'static str = "ES_PORT";
+const HOST: &'static str = "HOST";
+const PORT: &'static str = "PORT";
 
 mod endpoints;
 use endpoints::{hello_monq, index, page_not_found};
@@ -16,12 +16,12 @@ async fn main() -> std::io::Result<()> {
     setup_logger().expect("Failed to set up logger");
 
     // local loop back address
-    let host: String = dotenv::var(ES_HOST).expect("ES_HOST could not resolved");
+    let host: String = dotenv::var(HOST).expect("ES_HOST could not resolved");
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
     let ip = IpAddr::V4(localhost);
     assert_eq!(ip.is_loopback(), true);
 
-    let port = dotenv::var(ES_PORT).expect("ES_PORT could not resolved");
+    let port = dotenv::var(PORT).expect("ES_PORT could not resolved");
     let port = port.parse::<u16>().unwrap();
     let addr = SocketAddr::new(ip, port);
 
