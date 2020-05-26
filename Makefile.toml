@@ -1,0 +1,14 @@
+env_files = [
+    "./.env"
+]
+
+
+[tasks.start]
+description = "Run serve in development mode"
+workspace = false
+command = "systemfd"
+args = [
+    "--no-pid",
+    "-s", "http::${PORT}",
+    "--", "cargo", "watch", "-x", "run"
+]
