@@ -29,7 +29,7 @@ fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
 }
 
 #[actix_rt::main]
-async fn start_server() -> anyhow::Result<()> {
+async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
     // local loop back address
     let host: String = get_env_var(HOST)?;
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
@@ -43,6 +43,7 @@ async fn start_server() -> anyhow::Result<()> {
     // actix-web application factory
     let app_factory = move || {
         actix_web::App::new()
+            .data(client.clone())
             .wrap(actix_web::middleware::Logger::default())
             .service(index)
             .service(hello_monq)
@@ -72,6 +73,6 @@ fn main() -> anyhow::Result<()> {
     let client = create_elasticsearch_client(url)
         .with_context(|| format!("Failed to create elasticsearch client"))?;
 
-    start_server().with_context(|| format!("Failed to start server"))?;
+    start_server(client).with_context(|| format!("Failed to start server"))?;
     Ok(())
 }
