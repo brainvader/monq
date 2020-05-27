@@ -12,9 +12,7 @@ mod endpoints;
 use endpoints::{hello_monq, index, page_not_found};
 
 #[actix_rt::main]
-async fn main() -> std::io::Result<()> {
-    setup_logger().expect("Failed to set up logger");
-
+async fn start_server() -> std::io::Result<()> {
     // local loop back address
     let host: String = dotenv::var(HOST).expect("ES_HOST could not resolved");
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
@@ -44,4 +42,9 @@ async fn main() -> std::io::Result<()> {
     };
 
     server.run().await
+}
+
+fn main() -> std::io::Result<()> {
+    setup_logger().expect("Failed to set up logger");
+    Ok(start_server()?)
 }
