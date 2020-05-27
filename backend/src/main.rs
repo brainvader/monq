@@ -1,6 +1,7 @@
 use std::net::{IpAddr, Ipv4Addr, SocketAddr};
 
 use actix_web::{web, HttpServer};
+use anyhow::Context;
 use listenfd::ListenFd;
 
 use backend_lib::setup_logger;
@@ -12,7 +13,7 @@ mod endpoints;
 use endpoints::{hello_monq, index, page_not_found};
 
 #[actix_rt::main]
-async fn start_server() -> std::io::Result<()> {
+async fn start_server() -> anyhow::Result<()> {
     // local loop back address
     let host: String = dotenv::var(HOST).expect("ES_HOST could not resolved");
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
@@ -41,10 +42,12 @@ async fn start_server() -> std::io::Result<()> {
         server.bind(addr)?
     };
 
-    server.run().await
+    server.run().await;
+    Ok(())
 }
 
-fn main() -> std::io::Result<()> {
+fn main() -> anyhow::Result<()> {
     setup_logger().expect("Failed to set up logger");
-    Ok(start_server()?)
+    start_server().with_context(|| format!("Failed to start server"))?;
+    Ok(())
 }
