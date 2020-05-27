@@ -6,6 +6,8 @@ env_files = [
 [tasks.start]
 # only run if PORT  is set, otherwise skipped
 condition = { env_set = [ "PORT" ] }
+# run in specified directory
+cwd = "./backend"
 description = "Run serve in development mode"
 workspace = false
 command = "systemfd"
