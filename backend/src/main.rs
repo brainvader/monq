@@ -47,7 +47,7 @@ async fn start_server() -> anyhow::Result<()> {
 }
 
 fn main() -> anyhow::Result<()> {
-    setup_logger().expect("Failed to set up logger");
+    setup_logger().with_context(|| format!("Failed to set up logger"))?;
     start_server().with_context(|| format!("Failed to start server"))?;
     Ok(())
 }
