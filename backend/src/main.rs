@@ -20,12 +20,12 @@ fn get_env_var(key: &str) -> anyhow::Result<String> {
 #[actix_rt::main]
 async fn start_server() -> anyhow::Result<()> {
     // local loop back address
-    let host: String = dotenv::var(HOST).expect("ES_HOST could not resolved");
+    let host: String = get_env_var(HOST)?;
     let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
     let ip = IpAddr::V4(localhost);
     assert_eq!(ip.is_loopback(), true);
 
-    let port = dotenv::var(PORT).expect("ES_PORT could not resolved");
+    let port = get_env_var(PORT)?;
     let port = port.parse::<u16>().unwrap();
     let addr = SocketAddr::new(ip, port);
 
