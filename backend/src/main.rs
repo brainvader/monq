@@ -12,6 +12,11 @@ const PORT: &'static str = "PORT";
 mod endpoints;
 use endpoints::{hello_monq, index, page_not_found};
 
+fn get_env_var(key: &str) -> anyhow::Result<String> {
+    let value = dotenv::var(key).with_context(|| format!("Failed to find key: {}", key))?;
+    Ok(value)
+}
+
 #[actix_rt::main]
 async fn start_server() -> anyhow::Result<()> {
     // local loop back address
