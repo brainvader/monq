@@ -15,7 +15,7 @@ const ES_HOST: &'static str = "ES_HOST";
 const ES_PORT: &'static str = "ES_PORT";
 
 mod endpoints;
-use endpoints::{hello_monq, index, page_not_found};
+use endpoints::{cat, hello_monq, index, page_not_found};
 
 fn get_env_var(key: &str) -> anyhow::Result<String> {
     let value = dotenv::var(key).with_context(|| format!("Failed to find key: {}", key))?;
@@ -47,6 +47,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .wrap(actix_web::middleware::Logger::default())
             .service(index)
             .service(hello_monq)
+            .service(cat)
             .default_service(web::route().to(page_not_found))
     };
 
