@@ -2,6 +2,15 @@ env_files = [
     "./.env"
 ]
 
+[tasks.docker-compose-up]
+description = "Make docker swarm up and running"
+# Never run as independent task
+private = true
+workspace = false
+command = "docker-compose"
+args = [
+    "up", "-d"
+]
 
 [tasks.start]
 # only run if PORT  is set, otherwise skipped
@@ -10,6 +19,7 @@ condition = { env_set = [ "PORT" ] }
 cwd = "./backend"
 description = "Run serve in development mode"
 workspace = false
+dependencies = ["docker-compose-up"]
 command = "systemfd"
 args = [
     "--no-pid",
