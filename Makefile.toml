@@ -13,11 +13,11 @@ args = [
 ]
 
 [tasks.start]
+description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
 condition = { env_set = [ "PORT" ] }
 # run in specified directory
 cwd = "./backend"
-description = "Run serve in development mode"
 workspace = false
 dependencies = ["docker-compose-up"]
 command = "systemfd"
