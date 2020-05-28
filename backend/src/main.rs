@@ -1,26 +1,15 @@
-use std::net::{IpAddr, Ipv4Addr, SocketAddr};
-
 use actix_web::{web, HttpServer};
 use anyhow::Context;
-use backend_lib::setup_logger;
 use listenfd::ListenFd;
 use url::Url;
 
 use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::Elasticsearch;
 
-const HOST: &'static str = "HOST";
-const PORT: &'static str = "PORT";
-const ES_HOST: &'static str = "ES_HOST";
-const ES_PORT: &'static str = "ES_PORT";
-
 mod endpoints;
 use endpoints::{cat, hello_monq, index, page_not_found};
 
-fn get_env_var(key: &str) -> anyhow::Result<String> {
-    let value = dotenv::var(key).with_context(|| format!("Failed to find key: {}", key))?;
-    Ok(value)
-}
+use backend_lib::{get_es_url, get_server_address, setup_logger};
 
 fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);
@@ -30,16 +19,7 @@ fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
 
 #[actix_rt::main]
 async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
-    // local loop back address
-    let host: String = get_env_var(HOST)?;
-    let localhost: Ipv4Addr = host.parse::<Ipv4Addr>().unwrap();
-    let ip = IpAddr::V4(localhost);
-    assert_eq!(ip.is_loopback(), true);
-
-    let port = get_env_var(PORT)?;
-    let port = port.parse::<u16>().unwrap();
-    let addr = SocketAddr::new(ip, port);
-
+    let addr = get_server_address()?;
     // actix-web application factory
     let app_factory = move || {
         actix_web::App::new()
@@ -66,11 +46,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
 
 fn main() -> anyhow::Result<()> {
     setup_logger().with_context(|| format!("Failed to set up logger"))?;
-
-    let es_host = get_env_var(ES_HOST)?;
-    let es_port = get_env_var(ES_PORT)?;
-    let es_addr = format!("http://{}:{}", es_host, es_port);
-    let url = Url::parse(&es_addr)?;
+    let url = get_es_url()?;
     let client = create_elasticsearch_client(url)
         .with_context(|| format!("Failed to create elasticsearch client"))?;
 
