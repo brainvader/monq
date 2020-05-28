@@ -6,13 +6,10 @@ use url::Url;
 use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::Elasticsearch;
 
-const ES_HOST: &'static str = "ES_HOST";
-const ES_PORT: &'static str = "ES_PORT";
-
 mod endpoints;
 use endpoints::{cat, hello_monq, index, page_not_found};
 
-use backend_lib::{get_env_var, get_server_address, setup_logger};
+use backend_lib::{get_es_url, get_server_address, setup_logger};
 
 fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);
@@ -49,11 +46,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
 
 fn main() -> anyhow::Result<()> {
     setup_logger().with_context(|| format!("Failed to set up logger"))?;
-
-    let es_host = get_env_var(ES_HOST)?;
-    let es_port = get_env_var(ES_PORT)?;
-    let es_addr = format!("http://{}:{}", es_host, es_port);
-    let url = Url::parse(&es_addr)?;
+    let url = get_es_url()?;
     let client = create_elasticsearch_client(url)
         .with_context(|| format!("Failed to create elasticsearch client"))?;
 
