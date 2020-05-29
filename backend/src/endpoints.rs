@@ -2,6 +2,9 @@ use actix_web::{get, http, web, HttpResponse};
 use elasticsearch::http::response::Response;
 use elasticsearch::{Elasticsearch, Error};
 use futures::future::TryFutureExt;
+use juniper::http::graphiql::graphiql_source;
+
+use backend_lib::get_server_address;
 
 #[get("/")]
 pub async fn index() -> impl actix_web::Responder {
@@ -52,4 +55,22 @@ pub async fn page_not_found() -> impl actix_web::Responder {
     builder
         .content_type(mime_type.to_string())
         .body("404 Page Not Found")
+}
+
+#[get("/graphiql")]
+pub async fn graphiql() -> impl actix_web::Responder {
+    match get_server_address() {
+        Ok(addr) => {
+            let addr_str = addr.to_string();
+            let html = graphiql_source(&format!("http://{}/graphql", addr_str));
+            // TODO: Add plain and CORS header
+            HttpResponse::Ok()
+                .content_type("text/html; charset=utf-8")
+                .body(html)
+        }
+        Err(e) => {
+            log::info!("Failed to get server address: {}", e);
+            HttpResponse::InternalServerError().finish()
+        }
+    }
 }

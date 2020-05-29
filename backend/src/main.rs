@@ -7,7 +7,7 @@ use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, Trans
 use elasticsearch::Elasticsearch;
 
 mod endpoints;
-use endpoints::{cat, hello_monq, index, page_not_found};
+use endpoints::{cat, graphiql, hello_monq, index, page_not_found};
 
 use backend_lib::{get_es_url, get_server_address, setup_logger};
 
@@ -28,6 +28,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .service(index)
             .service(hello_monq)
             .service(cat)
+            .service(graphiql)
             .default_service(web::route().to(page_not_found))
     };
 
