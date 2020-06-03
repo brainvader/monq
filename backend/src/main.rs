@@ -9,7 +9,8 @@ use elasticsearch::Elasticsearch;
 mod endpoints;
 use endpoints::{cat, graphiql, hello_monq, index, page_not_found};
 
-use backend_lib::{get_es_url, get_server_address, setup_logger};
+mod util;
+use util::{get_es_url, get_server_address, setup_logger};
 
 fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);

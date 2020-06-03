@@ -4,7 +4,7 @@ use elasticsearch::{Elasticsearch, Error};
 use futures::future::TryFutureExt;
 use juniper::http::graphiql::graphiql_source;
 
-use backend_lib::get_server_address;
+use super::util::get_server_address;
 
 #[get("/")]
 pub async fn index() -> impl actix_web::Responder {
