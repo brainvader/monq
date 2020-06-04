@@ -1,7 +1,7 @@
 use elasticsearch::Elasticsearch;
 
-pub struct Context {
+pub struct GraphQLContext {
     pub client: Elasticsearch,
 }
 
-impl juniper::Context for Context {}
+impl juniper::Context for GraphQLContext {}
