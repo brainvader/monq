@@ -22,7 +22,7 @@ pub struct QueryRoot;
 
 #[juniper::object(Context = GraphQLContext)]
 impl QueryRoot {
-    fn human(id: String) -> FieldResult<Human> {
+    fn human() -> FieldResult<Human> {
         Ok(Human {
             id: ID::from("1234".to_owned()),
             name: "Luke".to_owned(),
