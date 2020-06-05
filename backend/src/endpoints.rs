@@ -10,7 +10,7 @@ use serde_json;
 use std::sync::Arc;
 
 use super::context::GraphQLContext;
-use super::schema::Schema;
+use super::schema::{create_schema, Schema};
 use super::util::get_server_address;
 
 #[get("/")]
@@ -100,4 +100,9 @@ pub async fn graphql(
     Ok(HttpResponse::Ok()
         .content_type("application/json")
         .body(res))
+}
+
+pub fn graphql_config(config: &mut web::ServiceConfig) {
+    let schema = std::sync::Arc::new(create_schema());
+    config.data(schema).service(graphql).service(graphiql);
 }
