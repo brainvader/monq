@@ -1,9 +1,16 @@
-use actix_web::{get, http, web, HttpResponse};
+use actix_web::{get, http, post, web, Error, HttpResponse};
 use elasticsearch::http::response::Response;
-use elasticsearch::{Elasticsearch, Error};
+use elasticsearch::Elasticsearch as ES_Client;
+use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
 use juniper::http::graphiql::graphiql_source;
+use juniper::http::GraphQLRequest;
+use serde_json;
 
+use std::sync::Arc;
+
+use super::context::GraphQLContext;
+use super::schema::{create_schema, Schema};
 use super::util::get_server_address;
 
 #[get("/")]
@@ -23,9 +30,9 @@ pub async fn hello_monq() -> impl actix_web::Responder {
 }
 
 #[get("/cat")]
-pub async fn cat(client: web::Data<Elasticsearch>) -> impl actix_web::Responder {
+pub async fn cat(client: web::Data<ES_Client>) -> impl actix_web::Responder {
     let cat_api = client.get_ref().cat();
-    let result: Result<String, Error> = cat_api
+    let result: Result<String, ES_Error> = cat_api
         .nodes()
         .h(&["ip", "port", "heapPercent", "name"])
         .format("json")
@@ -73,4 +80,29 @@ pub async fn graphiql() -> impl actix_web::Responder {
             HttpResponse::InternalServerError().finish()
         }
     }
+}
+
+#[post("/graphql")]
+pub async fn graphql(
+    state: web::Data<ES_Client>,
+    schema: web::Data<Arc<Schema>>,
+    data: web::Json<GraphQLRequest>,
+) -> Result<HttpResponse, Error> {
+    let client = state.get_ref().to_owned();
+    let context = GraphQLContext { client: client };
+    let res = web::block(move || {
+        let res = data.execute(&schema, &context);
+        Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
+    })
+    .await
+    .map_err(Error::from)?;
+
+    Ok(HttpResponse::Ok()
+        .content_type("application/json")
+        .body(res))
+}
+
+pub fn graphql_config(config: &mut web::ServiceConfig) {
+    let schema = std::sync::Arc::new(create_schema());
+    config.data(schema).service(graphql).service(graphiql);
 }
