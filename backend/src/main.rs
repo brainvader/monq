@@ -6,11 +6,9 @@ use url::Url;
 use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::Elasticsearch;
 
-mod endpoints;
-use endpoints::{cat, graphiql, hello_monq, index, page_not_found};
+use backend_lib::endpoints::{cat, graphql_config, hello_monq, index, page_not_found};
 
-mod util;
-use util::{get_es_url, get_server_address, setup_logger};
+use backend_lib::util::{get_es_url, get_server_address, setup_logger};
 
 fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);
