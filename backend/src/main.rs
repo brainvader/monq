@@ -27,7 +27,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .service(index)
             .service(hello_monq)
             .service(cat)
-            .service(graphiql)
+            .configure(graphql_config)
             .default_service(web::route().to(page_not_found))
     };
 
