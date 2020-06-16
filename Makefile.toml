@@ -2,6 +2,11 @@ env_files = [
     "./.env"
 ]
 
+[tasks.install-cargo-watch]
+install_crate = { crate_name = "cargo-watch", binary = "cargo", test_arg = ["watch", "--version"] }
+command = "cargo"
+args = ["watch", "--version"]
+
 [tasks.docker-compose-up]
 description = "Make docker swarm up and running"
 # Never run as independent task
@@ -19,7 +24,8 @@ condition = { env_set = [ "PORT" ] }
 # run in specified directory
 cwd = "./backend"
 workspace = false
-dependencies = ["docker-compose-up"]
+dependencies = ["docker-compose-up", "install-cargo-watch"]
+install_crate = "systemfd"
 command = "systemfd"
 args = [
     "--no-pid",
