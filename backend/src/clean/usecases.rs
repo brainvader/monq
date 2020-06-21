@@ -19,6 +19,7 @@ pub trait QuizInputPort {
 }
 pub trait QuizOutputPort {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> QuizDownloaded<entity::Quiz>;
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<entity::Quiz>;
 }
 
 pub trait QuizRepository {
