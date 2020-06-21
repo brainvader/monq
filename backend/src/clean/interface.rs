@@ -102,4 +102,8 @@ where
         // TODO: Need async functions for other parts
         futures::executor::block_on(self.handler.get(id))
     }
+
+    fn create(&self, quiz: &entity::Quiz) -> entity::Quiz {
+        futures::executor::block_on(self.handler.post(quiz))
+    }
 }
