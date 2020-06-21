@@ -68,7 +68,7 @@ where
     Handler: ESHandle,
 {
     fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz {
-        let response = self.handler.get(id);
-        response.source
+        // TODO: Need async functions for other parts
+        futures::executor::block_on(self.handler.get(id))
     }
 }
