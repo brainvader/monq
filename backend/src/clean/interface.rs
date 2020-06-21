@@ -49,3 +49,7 @@ pub struct ResponseBody<T> {
     #[serde(alias = "_source")]
     source: T,
 }
+
+pub trait ESHandler {
+    fn get(&self, id: &entity::QuizID) -> ResponseBody<entity::Quiz>;
+}
