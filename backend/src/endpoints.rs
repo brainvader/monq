@@ -8,7 +8,7 @@ use juniper::http::GraphQLRequest;
 
 use std::sync::Arc;
 
-use super::context::GraphQLContext;
+use super::context::{GraphQLContext, QuizController};
 use super::schema::{create_schema, Schema};
 use super::util::get_server_address;
 
@@ -83,12 +83,12 @@ pub async fn graphiql() -> impl actix_web::Responder {
 
 #[post("/graphql")]
 pub async fn graphql(
-    state: web::Data<ES_Client>,
+    state: web::Data<QuizController>,
     schema: web::Data<Arc<Schema>>,
     data: web::Json<GraphQLRequest>,
 ) -> Result<HttpResponse, Error> {
-    let client = state.get_ref().to_owned();
-    let context = GraphQLContext { client };
+    let controller: QuizController = state.get_ref().to_owned();
+    let context = GraphQLContext { controller };
     let res = web::block(move || {
         let res = data.execute(&schema, &context);
         Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)

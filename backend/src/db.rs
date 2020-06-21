@@ -17,6 +17,7 @@ pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError
     Ok(Elasticsearch::new(transport))
 }
 
+#[derive(Clone)]
 pub struct ESHandler {
     pub client: Elasticsearch,
 }
@@ -28,7 +29,7 @@ async fn get(client: &Elasticsearch, id: &entity::QuizID) -> anyhow::Result<enti
     Ok(response_body.source)
 }
 
-async fn post(client: &Elasticsearch, quiz: &entity::Quiz) -> anyhow::Result<entity::Quiz> {
+async fn post(client: &Elasticsearch, quiz: &entity::NewQuiz) -> anyhow::Result<entity::NewQuiz> {
     let index_parts = elasticsearch::IndexParts::IndexId("monq", &quiz.id);
     let response = client.index(index_parts).body(quiz).send().await?;
     let _ = response.json::<IndexResponseBody>().await?;
@@ -44,7 +45,7 @@ impl ESHandle for ESHandler {
         hoge.unwrap()
     }
 
-    async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz {
+    async fn post(&self, quiz: &entity::NewQuiz) -> entity::NewQuiz {
         post(&self.client, quiz).await.unwrap()
     }
 }
