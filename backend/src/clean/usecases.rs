@@ -24,6 +24,7 @@ pub trait QuizOutputPort {
 
 pub trait QuizRepository {
     fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz;
+    fn create(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
 pub struct QuizInteractor<OutputPort, Repository>
