@@ -55,6 +55,32 @@ pub struct ResponseBody<T> {
     pub source: T,
 }
 
+#[derive(Deserialize)]
+struct Shard {
+    failed: i64,
+    successful: i64,
+    total: i64,
+}
+
+#[derive(Deserialize)]
+pub struct IndexResponseBody {
+    #[serde(alias = "_index")]
+    index: String,
+    #[serde(alias = "_type")]
+    r#type: String,
+    #[serde(alias = "_id")]
+    id: String,
+    #[serde(alias = "_version")]
+    version: i64,
+    result: String,
+    #[serde(alias = "_shards")]
+    shards: Shard,
+    #[serde(alias = "_seq_no")]
+    seq_no: i64,
+    #[serde(alias = "_primary_term")]
+    primary_term: i64,
+}
+
 #[async_trait]
 pub trait ESHandle {
     async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
