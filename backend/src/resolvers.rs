@@ -14,3 +14,17 @@ impl QueryRoot {
         Ok(downloaded.source)
     }
 }
+
+pub struct MutationRoot;
+
+#[juniper::object(Context = GraphQLContext)]
+impl MutationRoot {
+    fn crate_quiz(
+        context: &GraphQLContext,
+        new_quiz: entity::NewQuiz,
+    ) -> FieldResult<entity::NewQuiz> {
+        let controller = context.controller.to_owned();
+        let crated = controller.post_quiz(new_quiz);
+        Ok(crated.source)
+    }
+}
