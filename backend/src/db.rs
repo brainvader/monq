@@ -13,4 +13,7 @@ pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError
     Ok(Elasticsearch::new(transport))
 }
 
-// pub fn get_pool() -> {}
+pub struct ESHandler {
+    pub client: Elasticsearch,
+}
+
