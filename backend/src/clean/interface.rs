@@ -9,7 +9,7 @@ pub struct Controller<InputPort>
 where
     InputPort: usecases::QuizInputPort,
 {
-    pub inputport: InputPort,
+    pub input_port: InputPort,
 }
 
 impl<InputPort> Controller<InputPort>
@@ -20,11 +20,11 @@ where
         &self,
         params: usecases::DownloadQuizRequestParams,
     ) -> usecases::QuizDownloaded<InputPort::Output> {
-        self.inputport.download_quiz(params)
+        self.input_port.download_quiz(params)
     }
 
     pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<InputPort::Output> {
-        self.inputport.post_quiz(quiz)
+        self.input_port.post_quiz(quiz)
     }
 }
 
