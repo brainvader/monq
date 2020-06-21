@@ -50,20 +50,20 @@ pub struct ResponseBody<T> {
     source: T,
 }
 
-pub trait ESHandler {
+pub trait ESHandle {
     fn get(&self, id: &entity::QuizID) -> ResponseBody<entity::Quiz>;
 }
 
 pub struct QuizDocumentRepository<Handler>
 where
-    Handler: ESHandler,
+    Handler: ESHandle,
 {
     pub handler: Handler,
 }
 
 impl<Handler> usecases::QuizRepository for QuizDocumentRepository<Handler>
 where
-    Handler: ESHandler,
+    Handler: ESHandle,
 {
     fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz {
         let response = self.handler.get(id);
