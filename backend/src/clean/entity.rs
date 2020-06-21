@@ -1,11 +1,13 @@
+use juniper::GraphQLObject;
 use serde::{Deserialize, Serialize};
 
 pub type QuizID = juniper::ID;
-type QuizTitle = String;
+type QuizTitle = Cell;
 type QuizQuestion = Vec<Cell>;
 type QuizAnswer = Vec<Cell>;
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(GraphQLObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "Quiz consists of question and answer")]
 pub struct Quiz {
     pub id: QuizID,
     pub title: QuizTitle,
@@ -13,7 +15,8 @@ pub struct Quiz {
     pub answer: QuizAnswer,
 }
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(GraphQLObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "A cell contains various kinds of format data")]
 pub struct Cell {
     pub r#type: String,
     pub content: String,
