@@ -8,6 +8,10 @@ pub struct QuizDownloaded<T> {
     pub source: T,
 }
 
+pub struct QuizPosted<T> {
+    pub source: T,
+}
+
 pub trait QuizInputPort {
     type Output;
     fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded<Self::Output>;
