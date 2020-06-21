@@ -6,7 +6,7 @@ pub type QuizController =
     Controller<QuizInteractor<QuizPresenter, QuizDocumentRepository<ESHandler>>>;
 
 pub struct GraphQLContext {
-    pub client: Elasticsearch,
+    pub controller: QuizController,
 }
 
 impl juniper::Context for GraphQLContext {}
