@@ -40,7 +40,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
         server.bind(addr)?
     };
 
-    server.run().await;
+    server.run().await?;
     Ok(())
 }
 
