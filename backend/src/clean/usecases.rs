@@ -15,6 +15,7 @@ pub struct QuizPosted<T> {
 pub trait QuizInputPort {
     type Output;
     fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded<Self::Output>;
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<Self::Output>;
 }
 pub trait QuizOutputPort {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> QuizDownloaded<entity::Quiz>;
