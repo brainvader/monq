@@ -20,11 +20,11 @@ where
     pub fn download_quiz(
         &self,
         params: usecases::DownloadQuizRequestParams,
-    ) -> usecases::QuizDownloaded<InputPort::Output> {
+    ) -> usecases::QuizDownloaded<InputPort::Output1> {
         self.input_port.download_quiz(params)
     }
 
-    pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<InputPort::Output> {
+    pub fn post_quiz(&self, quiz: entity::NewQuiz) -> usecases::QuizPosted<InputPort::Output2> {
         self.input_port.post_quiz(quiz)
     }
 }
@@ -37,7 +37,7 @@ impl usecases::QuizOutputPort for QuizPresenter {
         usecases::QuizDownloaded { source: quiz }
     }
 
-    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<entity::Quiz> {
+    fn post_quiz(&self, quiz: entity::NewQuiz) -> usecases::QuizPosted<entity::NewQuiz> {
         usecases::QuizPosted { source: quiz }
     }
 }
@@ -90,7 +90,7 @@ pub struct IndexResponseBody {
 #[async_trait]
 pub trait ESHandle {
     async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
-    async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz;
+    async fn post(&self, quiz: &entity::NewQuiz) -> entity::NewQuiz;
 }
 
 #[derive(Clone)]
@@ -110,7 +110,7 @@ where
         futures::executor::block_on(self.handler.get(id))
     }
 
-    fn create(&self, quiz: &entity::Quiz) -> entity::Quiz {
+    fn create(&self, quiz: &entity::NewQuiz) -> entity::NewQuiz {
         futures::executor::block_on(self.handler.post(quiz))
     }
 }
