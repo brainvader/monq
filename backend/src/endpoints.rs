@@ -5,7 +5,6 @@ use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
 use juniper::http::graphiql::graphiql_source;
 use juniper::http::GraphQLRequest;
-use serde_json;
 
 use std::sync::Arc;
 
