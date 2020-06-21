@@ -2,6 +2,8 @@
 use super::entity;
 use super::usecases;
 
+use serde::Deserialize;
+
 pub struct Controller<InputPort>
 where
     InputPort: usecases::QuizInputPort,
@@ -27,4 +29,23 @@ impl usecases::QuizOutputPort for QuizPresenter {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded<entity::Quiz> {
         usecases::QuizDownloaded { source: quiz }
     }
+}
+
+#[derive(Deserialize, Debug)]
+pub struct ResponseBody<T> {
+    #[serde(alias = "_index")]
+    index: String,
+    #[serde(alias = "_type")]
+    r#type: String,
+    #[serde(alias = "_id")]
+    id: String,
+    #[serde(alias = "_version")]
+    version: i64,
+    #[serde(alias = "_seq_no")]
+    seq_no: i64,
+    #[serde(alias = "_primary_term")]
+    primary_term: i64,
+    found: bool,
+    #[serde(alias = "_source")]
+    source: T,
 }
