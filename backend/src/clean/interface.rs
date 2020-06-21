@@ -47,7 +47,7 @@ pub struct ResponseBody<T> {
     primary_term: i64,
     found: bool,
     #[serde(alias = "_source")]
-    source: T,
+    pub source: T,
 }
 
 pub trait ESHandle {
