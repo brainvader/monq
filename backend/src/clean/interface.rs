@@ -84,6 +84,7 @@ pub struct IndexResponseBody {
 #[async_trait]
 pub trait ESHandle {
     async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
+    async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
 pub struct QuizDocumentRepository<Handler>
