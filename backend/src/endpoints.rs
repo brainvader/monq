@@ -88,7 +88,7 @@ pub async fn graphql(
     data: web::Json<GraphQLRequest>,
 ) -> Result<HttpResponse, Error> {
     let client = state.get_ref().to_owned();
-    let context = GraphQLContext { client: client };
+    let context = GraphQLContext { client };
     let res = web::block(move || {
         let res = data.execute(&schema, &context);
         Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
