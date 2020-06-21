@@ -47,4 +47,9 @@ where
         let quiz = self.repository.find_by_id(&id);
         self.output_port.downloaded_quiz(quiz)
     }
+
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<Self::Output> {
+        let quiz = self.repository.create(&quiz);
+        self.output_port.post_quiz(quiz)
+    }
 }
