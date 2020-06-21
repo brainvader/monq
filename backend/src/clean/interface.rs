@@ -30,6 +30,10 @@ impl usecases::QuizOutputPort for QuizPresenter {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded<entity::Quiz> {
         usecases::QuizDownloaded { source: quiz }
     }
+
+    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<entity::Quiz> {
+        usecases::QuizPosted { source: quiz }
+    }
 }
 
 #[derive(Deserialize, Debug)]
