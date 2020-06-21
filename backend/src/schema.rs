@@ -36,7 +36,7 @@ impl MutationRoot {
     fn createHuman(new_human: NewHuman) -> FieldResult<Human> {
         let human = Human {
             id: new_human.id.to_owned(),
-            name: new_human.name.to_owned(),
+            name: new_human.name,
         };
         log::info!("{:?}", human);
         Ok(human)
