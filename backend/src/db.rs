@@ -17,6 +17,7 @@ pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError
     Ok(Elasticsearch::new(transport))
 }
 
+#[derive(Clone)]
 pub struct ESHandler {
     pub client: Elasticsearch,
 }

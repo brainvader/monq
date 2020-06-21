@@ -27,6 +27,7 @@ pub trait QuizRepository {
     fn create(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
+#[derive(Clone)]
 pub struct QuizInteractor<OutputPort, Repository>
 where
     OutputPort: QuizOutputPort,

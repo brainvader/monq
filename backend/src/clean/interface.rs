@@ -5,6 +5,7 @@ use super::usecases;
 use async_trait::async_trait;
 use serde::Deserialize;
 
+#[derive(Clone)]
 pub struct Controller<InputPort>
 where
     InputPort: usecases::QuizInputPort,
@@ -28,6 +29,7 @@ where
     }
 }
 
+#[derive(Clone)]
 pub struct QuizPresenter;
 
 impl usecases::QuizOutputPort for QuizPresenter {
@@ -91,6 +93,7 @@ pub trait ESHandle {
     async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
+#[derive(Clone)]
 pub struct QuizDocumentRepository<Handler>
 where
     Handler: ESHandle,
