@@ -1,20 +1,13 @@
 use actix_web::{web, HttpServer};
 use anyhow::Context;
 use listenfd::ListenFd;
-use url::Url;
 
-use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
-use elasticsearch::Elasticsearch;
+use backend_lib::clean::{interface, usecases};
+use backend_lib::db::create_elasticsearch_client;
 
 use backend_lib::endpoints::{cat, graphql_config, hello_monq, index, page_not_found};
 
 use backend_lib::util::{get_es_url, get_server_address, setup_logger};
-
-fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
-    let conn_pool = SingleNodeConnectionPool::new(url);
-    let transport = TransportBuilder::new(conn_pool).disable_proxy().build()?;
-    Ok(Elasticsearch::new(transport))
-}
 
 #[actix_rt::main]
 async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
