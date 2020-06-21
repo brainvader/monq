@@ -12,10 +12,10 @@ pub fn setup_logger() -> dotenv::Result<()> {
     Ok(())
 }
 
-const HOST: &'static str = "HOST";
-const PORT: &'static str = "PORT";
-const ES_HOST: &'static str = "ES_HOST";
-const ES_PORT: &'static str = "ES_PORT";
+const HOST: &str = "HOST";
+const PORT: &str = "PORT";
+const ES_HOST: &str = "ES_HOST";
+const ES_PORT: &str = "ES_PORT";
 
 fn get_env_var(key: &str) -> anyhow::Result<String> {
     let value = dotenv::var(key).with_context(|| format!("Failed to find key: {}", key))?;

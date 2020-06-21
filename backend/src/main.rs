@@ -40,16 +40,16 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
         server.bind(addr)?
     };
 
-    server.run().await;
+    server.run().await?;
     Ok(())
 }
 
 fn main() -> anyhow::Result<()> {
-    setup_logger().with_context(|| format!("Failed to set up logger"))?;
+    setup_logger().with_context(|| "Failed to set up logger")?;
     let url = get_es_url()?;
     let client = create_elasticsearch_client(url)
-        .with_context(|| format!("Failed to create elasticsearch client"))?;
+        .with_context(|| "Failed to create elasticsearch client")?;
 
-    start_server(client).with_context(|| format!("Failed to start server"))?;
+    start_server(client).with_context(|| "Failed to start server")?;
     Ok(())
 }
