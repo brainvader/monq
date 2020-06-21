@@ -9,7 +9,7 @@ use elasticsearch::Elasticsearch;
 use url::Url;
 
 use super::clean::entity;
-use super::clean::interface::{ESHandle, ResponseBody};
+use super::clean::interface::{ESHandle, IndexResponseBody, ResponseBody};
 
 pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);
@@ -28,11 +28,23 @@ async fn get(client: &Elasticsearch, id: &entity::QuizID) -> anyhow::Result<enti
     Ok(response_body.source)
 }
 
+async fn post(client: &Elasticsearch, quiz: &entity::Quiz) -> anyhow::Result<entity::Quiz> {
+    let index_parts = elasticsearch::IndexParts::IndexId("monq", &quiz.id);
+    let response = client.index(index_parts).body(quiz).send().await?;
+    let _ = response.json::<IndexResponseBody>().await?;
+    let clone = quiz.clone();
+    Ok(clone)
+}
+
 #[async_trait]
 impl ESHandle for ESHandler {
     async fn get(&self, id: &entity::QuizID) -> entity::Quiz {
         let hoge = get(&self.client, id).await;
         // FIXME: Use anyhow or Result to handle error
         hoge.unwrap()
+    }
+
+    async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz {
+        post(&self.client, quiz).await.unwrap()
     }
 }
