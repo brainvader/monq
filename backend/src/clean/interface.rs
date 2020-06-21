@@ -2,6 +2,7 @@
 use super::entity;
 use super::usecases;
 
+use async_trait::async_trait;
 use serde::Deserialize;
 
 pub struct Controller<InputPort>
@@ -50,8 +51,9 @@ pub struct ResponseBody<T> {
     pub source: T,
 }
 
+#[async_trait]
 pub trait ESHandle {
-    fn get(&self, id: &entity::QuizID) -> ResponseBody<entity::Quiz>;
+    async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
 }
 
 pub struct QuizDocumentRepository<Handler>
