@@ -24,7 +24,7 @@ where
     }
 }
 
-pub struct QuizPresenter {}
+pub struct QuizPresenter;
 
 impl usecases::QuizOutputPort for QuizPresenter {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded<entity::Quiz> {
