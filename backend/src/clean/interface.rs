@@ -20,11 +20,11 @@ where
     pub fn download_quiz(
         &self,
         params: usecases::DownloadQuizRequestParams,
-    ) -> usecases::QuizDownloaded<InputPort::Output> {
+    ) -> usecases::QuizDownloaded {
         self.input_port.download_quiz(params)
     }
 
-    pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<InputPort::Output> {
+    pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted {
         self.input_port.post_quiz(quiz)
     }
 }
@@ -33,11 +33,11 @@ where
 pub struct QuizPresenter;
 
 impl usecases::QuizOutputPort for QuizPresenter {
-    fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded<entity::Quiz> {
+    fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded {
         usecases::QuizDownloaded { source: quiz }
     }
 
-    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<entity::Quiz> {
+    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted {
         usecases::QuizPosted { source: quiz }
     }
 }

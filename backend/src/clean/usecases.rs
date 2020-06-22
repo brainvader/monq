@@ -4,22 +4,21 @@ pub struct DownloadQuizRequestParams {
     pub id: entity::QuizID,
 }
 
-pub struct QuizDownloaded<T> {
-    pub source: T,
+pub struct QuizDownloaded {
+    pub source: entity::Quiz,
 }
 
-pub struct QuizPosted<T> {
-    pub source: T,
+pub struct QuizPosted {
+    pub source: entity::Quiz,
 }
 
 pub trait QuizInputPort {
-    type Output;
-    fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded<Self::Output>;
-    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<Self::Output>;
+    fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded;
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted;
 }
 pub trait QuizOutputPort {
-    fn downloaded_quiz(&self, quiz: entity::Quiz) -> QuizDownloaded<entity::Quiz>;
-    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<entity::Quiz>;
+    fn downloaded_quiz(&self, quiz: entity::Quiz) -> QuizDownloaded;
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted;
 }
 
 pub trait QuizRepository {
@@ -42,14 +41,13 @@ where
     OutputPort: QuizOutputPort,
     Repository: QuizRepository,
 {
-    type Output = entity::Quiz;
-    fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded<Self::Output> {
+    fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded {
         let id = params.id;
         let quiz = self.repository.find_by_id(&id);
         self.output_port.downloaded_quiz(quiz)
     }
 
-    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted<Self::Output> {
+    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted {
         let quiz = self.repository.create(&quiz);
         self.output_port.post_quiz(quiz)
     }
