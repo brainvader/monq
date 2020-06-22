@@ -44,8 +44,35 @@ where
         self.input_port.download_quiz(params)
     }
 
-    pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted {
-        self.input_port.post_quiz(quiz)
+    pub fn post_quiz(&self, new_quiz: NewQuiz) -> usecases::QuizPosted {
+        let new_title = entity::Cell {
+            r#type: new_quiz.title.r#type,
+            content: new_quiz.title.content,
+        };
+        let new_question = new_quiz
+            .question
+            .into_iter()
+            .map(|cell| entity::Cell {
+                r#type: cell.r#type,
+                content: cell.content,
+            })
+            .collect();
+        let new_answer = new_quiz
+            .answer
+            .into_iter()
+            .map(|cell| entity::Cell {
+                r#type: cell.r#type,
+                content: cell.content,
+            })
+            .collect();
+        let quiz = entity::Quiz {
+            id: new_quiz.id,
+            title: new_title,
+            question: new_question,
+            answer: new_answer,
+        };
+        let params = usecases::PostParams { quiz };
+        self.input_port.post_quiz(params)
     }
 }
 

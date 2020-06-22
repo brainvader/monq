@@ -4,6 +4,10 @@ pub struct DownloadQuizRequestParams {
     pub id: String,
 }
 
+pub struct PostParams {
+    pub quiz: entity::Quiz,
+}
+
 pub struct QuizDownloaded {
     pub source: entity::Quiz,
 }
@@ -14,7 +18,7 @@ pub struct QuizPosted {
 
 pub trait QuizInputPort {
     fn download_quiz(&self, params: DownloadQuizRequestParams) -> QuizDownloaded;
-    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted;
+    fn post_quiz(&self, params: PostParams) -> QuizPosted;
 }
 pub trait QuizOutputPort {
     fn downloaded_quiz(&self, quiz: entity::Quiz) -> QuizDownloaded;
@@ -47,7 +51,8 @@ where
         self.output_port.downloaded_quiz(quiz)
     }
 
-    fn post_quiz(&self, quiz: entity::Quiz) -> QuizPosted {
+    fn post_quiz(&self, params: PostParams) -> QuizPosted {
+        let quiz = params.quiz;
         let quiz = self.repository.create(&quiz);
         self.output_port.post_quiz(quiz)
     }
