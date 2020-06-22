@@ -13,10 +13,10 @@ impl QueryRoot {
     }
 }
 
-pub struct Mutations {}
+pub struct MutationRoot;
 
 #[juniper::object(Context = GraphQLContext)]
-impl Mutations {
+impl MutationRoot {
     fn crate_quiz(
         context: &GraphQLContext,
         new_quiz: interface::NewQuiz,
