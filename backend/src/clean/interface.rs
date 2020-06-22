@@ -3,7 +3,29 @@ use super::entity;
 use super::usecases;
 
 use async_trait::async_trait;
-use serde::Deserialize;
+use juniper::GraphQLInputObject;
+use serde::{Deserialize, Serialize};
+
+pub type NewQuizID = juniper::ID;
+type NewQuizTitle = NewCell;
+type NewQuizQuestion = Vec<NewCell>;
+type NewQuizAnswer = Vec<NewCell>;
+
+#[derive(GraphQLInputObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "Quiz consists of question and answer")]
+pub struct NewQuiz {
+    pub id: NewQuizID,
+    pub title: NewQuizTitle,
+    pub question: NewQuizQuestion,
+    pub answer: NewQuizAnswer,
+}
+
+#[derive(GraphQLInputObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "A cell contains various kinds of format data")]
+pub struct NewCell {
+    pub r#type: String,
+    pub content: String,
+}
 
 #[derive(Clone)]
 pub struct Controller<InputPort>
@@ -17,15 +39,40 @@ impl<InputPort> Controller<InputPort>
 where
     InputPort: usecases::QuizInputPort,
 {
-    pub fn download_quiz(
-        &self,
-        params: usecases::DownloadQuizRequestParams,
-    ) -> usecases::QuizDownloaded<InputPort::Output> {
+    pub fn download_quiz(&self, id: String) -> usecases::QuizDownloaded {
+        let params = usecases::DownloadQuizRequestParams { id };
         self.input_port.download_quiz(params)
     }
 
-    pub fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<InputPort::Output> {
-        self.input_port.post_quiz(quiz)
+    pub fn post_quiz(&self, new_quiz: NewQuiz) -> usecases::QuizPosted {
+        let new_title = entity::Cell {
+            r#type: new_quiz.title.r#type,
+            content: new_quiz.title.content,
+        };
+        let new_question = new_quiz
+            .question
+            .into_iter()
+            .map(|cell| entity::Cell {
+                r#type: cell.r#type,
+                content: cell.content,
+            })
+            .collect();
+        let new_answer = new_quiz
+            .answer
+            .into_iter()
+            .map(|cell| entity::Cell {
+                r#type: cell.r#type,
+                content: cell.content,
+            })
+            .collect();
+        let quiz = entity::Quiz {
+            id: new_quiz.id,
+            title: new_title,
+            question: new_question,
+            answer: new_answer,
+        };
+        let params = usecases::PostParams { quiz };
+        self.input_port.post_quiz(params)
     }
 }
 
@@ -33,11 +80,11 @@ where
 pub struct QuizPresenter;
 
 impl usecases::QuizOutputPort for QuizPresenter {
-    fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded<entity::Quiz> {
+    fn downloaded_quiz(&self, quiz: entity::Quiz) -> usecases::QuizDownloaded {
         usecases::QuizDownloaded { source: quiz }
     }
 
-    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted<entity::Quiz> {
+    fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted {
         usecases::QuizPosted { source: quiz }
     }
 }
@@ -89,7 +136,7 @@ pub struct IndexResponseBody {
 
 #[async_trait]
 pub trait ESHandle {
-    async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
+    async fn get(&self, id: &str) -> entity::Quiz;
     async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
@@ -105,7 +152,7 @@ impl<Handler> usecases::QuizRepository for QuizDocumentRepository<Handler>
 where
     Handler: ESHandle,
 {
-    fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz {
+    fn find_by_id(&self, id: &str) -> entity::Quiz {
         // TODO: Need async functions for other parts
         futures::executor::block_on(self.handler.get(id))
     }

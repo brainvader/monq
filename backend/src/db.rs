@@ -22,7 +22,7 @@ pub struct ESHandler {
     pub client: Elasticsearch,
 }
 
-async fn get(client: &Elasticsearch, id: &entity::QuizID) -> anyhow::Result<entity::Quiz> {
+async fn get(client: &Elasticsearch, id: &str) -> anyhow::Result<entity::Quiz> {
     let get_parts = elasticsearch::GetParts::IndexId("monq", id);
     let response = client.get(get_parts).send().await?;
     let response_body = response.json::<ResponseBody<entity::Quiz>>().await?;
@@ -39,7 +39,7 @@ async fn post(client: &Elasticsearch, quiz: &entity::Quiz) -> anyhow::Result<ent
 
 #[async_trait]
 impl ESHandle for ESHandler {
-    async fn get(&self, id: &entity::QuizID) -> entity::Quiz {
+    async fn get(&self, id: &str) -> entity::Quiz {
         let hoge = get(&self.client, id).await;
         // FIXME: Use anyhow or Result to handle error
         hoge.unwrap()
