@@ -157,7 +157,7 @@ where
         futures::executor::block_on(self.handler.get(id))
     }
 
-    fn create(&self, quiz: &entity::NewQuiz) -> entity::NewQuiz {
+    fn create(&self, quiz: &entity::Quiz) -> entity::Quiz {
         futures::executor::block_on(self.handler.post(quiz))
     }
 }
