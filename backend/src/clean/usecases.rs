@@ -1,7 +1,7 @@
 use super::entity;
 
 pub struct DownloadQuizRequestParams {
-    pub id: entity::QuizID,
+    pub id: String,
 }
 
 pub struct QuizDownloaded {
@@ -22,7 +22,7 @@ pub trait QuizOutputPort {
 }
 
 pub trait QuizRepository {
-    fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz;
+    fn find_by_id(&self, id: &str) -> entity::Quiz;
     fn create(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 

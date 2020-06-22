@@ -39,10 +39,8 @@ impl<InputPort> Controller<InputPort>
 where
     InputPort: usecases::QuizInputPort,
 {
-    pub fn download_quiz(
-        &self,
-        params: usecases::DownloadQuizRequestParams,
-    ) -> usecases::QuizDownloaded {
+    pub fn download_quiz(&self, id: String) -> usecases::QuizDownloaded {
+        let params = usecases::DownloadQuizRequestParams { id };
         self.input_port.download_quiz(params)
     }
 
@@ -111,7 +109,7 @@ pub struct IndexResponseBody {
 
 #[async_trait]
 pub trait ESHandle {
-    async fn get(&self, id: &entity::QuizID) -> entity::Quiz;
+    async fn get(&self, id: &str) -> entity::Quiz;
     async fn post(&self, quiz: &entity::Quiz) -> entity::Quiz;
 }
 
@@ -127,7 +125,7 @@ impl<Handler> usecases::QuizRepository for QuizDocumentRepository<Handler>
 where
     Handler: ESHandle,
 {
-    fn find_by_id(&self, id: &entity::QuizID) -> entity::Quiz {
+    fn find_by_id(&self, id: &str) -> entity::Quiz {
         // TODO: Need async functions for other parts
         futures::executor::block_on(self.handler.get(id))
     }

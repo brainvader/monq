@@ -1,4 +1,4 @@
-use super::clean::{entity, usecases};
+use super::clean::{entity, interface};
 use super::context::GraphQLContext;
 use juniper::FieldResult;
 
@@ -8,9 +8,7 @@ pub struct QueryRoot;
 impl QueryRoot {
     fn quiz(context: &GraphQLContext, id: String) -> FieldResult<entity::Quiz> {
         let controller = context.controller.clone();
-        let quiz_id = entity::QuizID::from(id);
-        let params = usecases::DownloadQuizRequestParams { id: quiz_id };
-        let downloaded = controller.download_quiz(params);
+        let downloaded = controller.download_quiz(id);
         Ok(downloaded.source)
     }
 }
