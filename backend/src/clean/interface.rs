@@ -3,7 +3,29 @@ use super::entity;
 use super::usecases;
 
 use async_trait::async_trait;
-use serde::Deserialize;
+use juniper::GraphQLInputObject;
+use serde::{Deserialize, Serialize};
+
+pub type NewQuizID = juniper::ID;
+type NewQuizTitle = NewCell;
+type NewQuizQuestion = Vec<NewCell>;
+type NewQuizAnswer = Vec<NewCell>;
+
+#[derive(GraphQLInputObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "Quiz consists of question and answer")]
+pub struct NewQuiz {
+    pub id: NewQuizID,
+    pub title: NewQuizTitle,
+    pub question: NewQuizQuestion,
+    pub answer: NewQuizAnswer,
+}
+
+#[derive(GraphQLInputObject, Deserialize, Serialize, Clone)]
+#[graphql(description = "A cell contains various kinds of format data")]
+pub struct NewCell {
+    pub r#type: String,
+    pub content: String,
+}
 
 #[derive(Clone)]
 pub struct Controller<InputPort>
