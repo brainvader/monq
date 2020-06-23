@@ -8,5 +8,3 @@ pub type QuizController =
 pub struct GraphQLContext {
     pub controller: QuizController,
 }
-
-impl juniper::Context for GraphQLContext {}

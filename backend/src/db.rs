@@ -33,7 +33,7 @@ async fn post(client: &Elasticsearch, quiz: &entity::Quiz) -> anyhow::Result<ent
     let index_parts = elasticsearch::IndexParts::IndexId("monq", &quiz.id);
     let response = client.index(index_parts).body(quiz).send().await?;
     let _ = response.json::<IndexResponseBody>().await?;
-    let clone = quiz.clone();
+    let clone = quiz.to_owned();
     Ok(clone)
 }
 
