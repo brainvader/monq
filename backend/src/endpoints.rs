@@ -4,6 +4,8 @@ use elasticsearch::Elasticsearch as ES_Client;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
 
+use super::context::QuizController;
+
 #[get("/")]
 pub async fn index() -> impl actix_web::Responder {
     let mut builder = HttpResponse::Ok();
@@ -21,8 +23,8 @@ pub async fn hello_monq() -> impl actix_web::Responder {
 }
 
 #[get("/cat")]
-pub async fn cat(client: web::Data<ES_Client>) -> impl actix_web::Responder {
-    let cat_api = client.get_ref().cat();
+pub async fn cat(controller: web::Data<QuizController>) -> impl actix_web::Responder {
+    let cat_api = controller.input_port.repository.handler.client.cat();
     let result: Result<String, ES_Error> = cat_api
         .nodes()
         .h(&["ip", "port", "heapPercent", "name"])
