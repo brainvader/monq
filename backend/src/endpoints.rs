@@ -3,14 +3,6 @@ use elasticsearch::http::response::Response;
 use elasticsearch::Elasticsearch as ES_Client;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
-use juniper::http::graphiql::graphiql_source;
-use juniper::http::GraphQLRequest;
-
-use std::sync::Arc;
-
-use super::context::{GraphQLContext, QuizController};
-use super::schema::{create_schema, Schema};
-use super::util::get_server_address;
 
 #[get("/")]
 pub async fn index() -> impl actix_web::Responder {
@@ -61,47 +53,4 @@ pub async fn page_not_found() -> impl actix_web::Responder {
     builder
         .content_type(mime_type.to_string())
         .body("404 Page Not Found")
-}
-
-#[get("/graphiql")]
-pub async fn graphiql() -> impl actix_web::Responder {
-    match get_server_address() {
-        Ok(addr) => {
-            let addr_str = addr.to_string();
-            let html = graphiql_source(&format!("http://{}/graphql", addr_str));
-            // TODO: Add plain and CORS header
-            HttpResponse::Ok()
-                .content_type("text/html; charset=utf-8")
-                .body(html)
-        }
-        Err(e) => {
-            log::info!("Failed to get server address: {}", e);
-            HttpResponse::InternalServerError().finish()
-        }
-    }
-}
-
-#[post("/graphql")]
-pub async fn graphql(
-    state: web::Data<QuizController>,
-    schema: web::Data<Arc<Schema>>,
-    data: web::Json<GraphQLRequest>,
-) -> Result<HttpResponse, Error> {
-    let controller: QuizController = state.get_ref().to_owned();
-    let context = GraphQLContext { controller };
-    let res = web::block(move || {
-        let res = data.execute(&schema, &context);
-        Ok::<_, serde_json::error::Error>(serde_json::to_string(&res)?)
-    })
-    .await
-    .map_err(Error::from)?;
-
-    Ok(HttpResponse::Ok()
-        .content_type("application/json")
-        .body(res))
-}
-
-pub fn graphql_config(config: &mut web::ServiceConfig) {
-    let schema = std::sync::Arc::new(create_schema());
-    config.data(schema).service(graphql).service(graphiql);
 }
