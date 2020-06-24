@@ -1,9 +1,9 @@
-use actix_web::{get, http, post, web, Error, HttpResponse};
+use actix_web::{get, http, post, web, HttpRequest, HttpResponse};
 use elasticsearch::http::response::Response;
-use elasticsearch::Elasticsearch as ES_Client;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
 
+use super::clean::entity::{Cell, Quiz, QuizTitle};
 use super::context::QuizController;
 
 #[get("/")]
@@ -20,6 +20,14 @@ pub async fn hello_monq() -> impl actix_web::Responder {
     builder
         .content_type(mime_type.to_string())
         .body("Hello MonQ!")
+}
+
+pub async fn page_not_found() -> impl actix_web::Responder {
+    let mut builder = HttpResponse::NotFound();
+    let mime_type = http::header::ContentType::plaintext();
+    builder
+        .content_type(mime_type.to_string())
+        .body("404 Page Not Found")
 }
 
 #[get("/cat")]
@@ -49,10 +57,41 @@ pub async fn cat(controller: web::Data<QuizController>) -> impl actix_web::Respo
     }
 }
 
-pub async fn page_not_found() -> impl actix_web::Responder {
-    let mut builder = HttpResponse::NotFound();
-    let mime_type = http::header::ContentType::plaintext();
+#[get("/quizzes/{id}")]
+pub async fn get_quiz(req: HttpRequest, id: web::Path<String>) -> impl actix_web::Responder {
+    let question = vec![Cell {
+        r#type: "text".to_owned(),
+        content: "MonQとは?".to_owned(),
+    }];
+    let answer = vec![Cell {
+        r#type: "text".to_owned(),
+        content: "MonQはクイズベースの学習システムです.".to_owned(),
+    }];
+    let quiz = Quiz {
+        id: id.to_owned(),
+        title: QuizTitle {
+            r#type: "text".to_owned(),
+            content: "MonQ Overview".to_owned(),
+        },
+        question,
+        answer,
+    };
+    log::info!("Get Quizzes");
+    log::info!("{:?}", id);
+    HttpResponse::Ok().json(quiz)
+}
+
+#[post("/quizzes")]
+pub async fn post_quiz(quiz: web::Json<Quiz>) -> impl actix_web::Responder {
+    log::info!("Posted");
+    log::info!("{:?}", quiz.id);
+    let mut builder = HttpResponse::Ok();
+    let mime_type = http::header::ContentType::json();
     builder
         .content_type(mime_type.to_string())
-        .body("404 Page Not Found")
+        .json(quiz.into_inner())
+}
+
+pub fn monq_endpoints(config: &mut web::ServiceConfig) {
+    config.service(cat).service(get_quiz).service(post_quiz);
 }
