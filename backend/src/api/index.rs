@@ -2,7 +2,7 @@ use serde::Serialize;
 
 pub struct Index<'a> {
     name: &'a str,
-    config: RequestBody<'a>,
+    config: RequestBody,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
@@ -18,11 +18,11 @@ enum FieldType {
 }
 
 #[derive(Serialize)]
-pub struct RequestBody<'a> {
-    mappings: Mappings<'a>,
+pub struct RequestBody {
+    mappings: Mappings,
 }
 
-impl<'a> Default for RequestBody<'a> {
+impl Default for RequestBody {
     fn default() -> Self {
         let title = Property { r#type: "text" };
         let question = Property { r#type: "text" };
@@ -39,21 +39,21 @@ impl<'a> Default for RequestBody<'a> {
 
 #[derive(Serialize)]
 // #[serde(rename = "mappings")]
-pub struct Mappings<'a> {
-    properties: Properties<'a>,
+pub struct Mappings {
+    properties: Properties,
 }
 
 #[derive(Serialize)]
-pub struct Properties<'a> {
-    title: Property<'a>,
-    question: Property<'a>,
-    answer: Property<'a>,
+pub struct Properties {
+    title: Property,
+    question: Property,
+    answer: Property,
 }
 
 // Mapping parameters
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
-pub struct Property<'a> {
-    r#type: &'a str,
+pub struct Property {
+    r#type: FieldType,
     // analyzer: String,
 }
