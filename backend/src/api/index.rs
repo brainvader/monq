@@ -24,9 +24,15 @@ pub struct RequestBody {
 
 impl Default for RequestBody {
     fn default() -> Self {
-        let title = Property { r#type: "text" };
-        let question = Property { r#type: "text" };
-        let answer = Property { r#type: "text" };
+        let title = Property {
+            r#type: FieldType::Text,
+        };
+        let question = Property {
+            r#type: FieldType::Text,
+        };
+        let answer = Property {
+            r#type: FieldType::Text,
+        };
         let properties = Properties {
             title,
             question,
