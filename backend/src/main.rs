@@ -3,6 +3,7 @@ use anyhow::Context;
 use elasticsearch::Elasticsearch;
 use listenfd::ListenFd;
 
+use backend_lib::api;
 use backend_lib::clean::{interface, usecases};
 use backend_lib::db::create_elasticsearch_client;
 use backend_lib::db::ESHandler;
@@ -50,7 +51,13 @@ fn main() -> anyhow::Result<()> {
     let url = get_es_url()?;
     let client = create_elasticsearch_client(url)
         .with_context(|| "Failed to create elasticsearch client")?;
+    let mut executor =
+        tokio::runtime::Runtime::new().with_context(|| "Failed to crate tokio runtime")?;
+    let response = executor
+        .block_on(api::index::create(&client, "monq"))
+        .with_context(|| "Failed to create index")?;
+    log::info!("{}", response);
 
-    start_server(client).with_context(|| "Failed to start server")?;
+    // start_server(client).with_context(|| "Failed to start server")?;
     Ok(())
 }
