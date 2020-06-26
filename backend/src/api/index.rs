@@ -43,7 +43,7 @@ pub struct RequestBody<'a> {
     settings: Settings<'a>,
 }
 
-impl Default for RequestBody {
+impl<'a> Default for RequestBody<'a> {
     fn default() -> Self {
         let title = Property {
             r#type: FieldType::Text,
@@ -59,8 +59,35 @@ impl Default for RequestBody {
             question,
             answer,
         };
+        let sudachi_tokenizer = SudachiTokenizerParams {
+            r#type: "sudachi_tokenizer",
+            mode: "search",
+            discard_punctuation: true,
+            resources_path: std::path::Path::new(
+                "/usr/share/elasticsearch/plugins/analysis-sudachi/",
+            ),
+            settings_path: std::path::Path::new(
+                "/usr/share/elasticsearch/plugins/analysis-sudachi/sudachi.json",
+            ),
+        };
+
+        let sudachi_analyzer = SudachiAnalyzerParams {
+            tokenizer: sudachi_tokenizer.r#type,
+            r#type: "custom",
+            char_filter: Vec::new(),
+            token_filter: vec![
+                "sudachi_part_of_speech",
+                "sudachi_ja_stop",
+                "sudachi_baseform",
+            ],
+        };
+        let analysis = SudachiAnalysis {
+            tokenizer: SudachiTokenizer { sudachi_tokenizer },
+            analyzer: SudachiAnalyzer { sudachi_analyzer },
+        };
         let mappings = Mappings { properties };
-        Self { mappings }
+        let settings = Settings { analysis };
+        Self { mappings, settings }
     }
 }
 
