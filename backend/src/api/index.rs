@@ -86,6 +86,11 @@ pub struct Property {
 }
 
 #[derive(Serialize)]
+pub struct SudachiTokenizer<'a> {
+    sudachi_tokenizer: SudachiTokenizerParams<'a>,
+}
+
+#[derive(Serialize)]
 pub struct SudachiTokenizerParams<'a> {
     r#type: &'a str,
     mode: &'a str,
