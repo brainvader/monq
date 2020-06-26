@@ -21,8 +21,8 @@ pub async fn create(client: &Elasticsearch, name: &str) -> anyhow::Result<String
 }
 
 pub struct Index<'a> {
-    name: &'a str,
-    config: RequestBody,
+    pub name: &'a str,
+    pub config: RequestBody<'a>,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
