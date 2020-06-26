@@ -85,6 +85,13 @@ pub struct Property {
     // analyzer: String,
 }
 
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html#index-modules-settings
+// https://docs.rs/elasticsearch/7.8.0-alpha.1/elasticsearch/indices/struct.IndicesExists.html
+#[derive(Serialize)]
+pub struct Settings<'a> {
+    analysis: SudachiAnalysis<'a>,
+}
+
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-custom-analyzer.html
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/test-analyzer.html
 #[derive(Serialize)]
