@@ -9,7 +9,8 @@ services:
     # ES Node
     es01:
         # https://hub.docker.com/_/elasticsearch?tab=reviews
-        image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+        # image: docker.elastic.co/elasticsearch/elasticsearch:7.5.0
+        build: elasticsearch
         container_name: monq
         environment:
             # Node identifier

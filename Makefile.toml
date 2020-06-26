@@ -11,6 +11,7 @@ args = ["watch", "--version"]
 description = "Make docker swarm up and running"
 # Never run as independent task
 private = true
+cwd = "./docker"
 workspace = false
 command = "docker-compose"
 args = [
