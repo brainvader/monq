@@ -98,6 +98,12 @@ pub struct SudachiTokenizerParams<'a> {
     resources_path: &'a std::path::Path,
     settings_path: &'a std::path::Path,
 }
+
+#[derive(Serialize)]
+pub struct SudachiAnalyzer<'a> {
+    sudachi_analyzer: SudachiAnalyzerParams<'a>,
+}
+
 #[derive(Serialize)]
 pub struct SudachiAnalyzerParams<'a> {
     tokenizer: &'a str,
