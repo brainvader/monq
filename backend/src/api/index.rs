@@ -84,3 +84,12 @@ pub struct Property {
     r#type: FieldType,
     // analyzer: String,
 }
+
+#[derive(Serialize)]
+pub struct SudachiTokenizerParams<'a> {
+    r#type: &'a str,
+    mode: &'a str,
+    discard_punctuation: bool,
+    resources_path: &'a std::path::Path,
+    settings_path: &'a std::path::Path,
+}
