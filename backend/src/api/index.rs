@@ -93,3 +93,11 @@ pub struct SudachiTokenizerParams<'a> {
     resources_path: &'a std::path::Path,
     settings_path: &'a std::path::Path,
 }
+#[derive(Serialize)]
+pub struct SudachiAnalyzerParams<'a> {
+    tokenizer: &'a str,
+    r#type: &'a str,
+    char_filter: Vec<&'a str>,
+    #[serde(rename = "filter")]
+    token_filter: Vec<&'a str>,
+}
