@@ -63,11 +63,9 @@ impl<'a> Default for RequestBody<'a> {
             r#type: "sudachi_tokenizer",
             mode: "search",
             discard_punctuation: true,
-            resources_path: std::path::Path::new(
-                "/usr/share/elasticsearch/plugins/analysis-sudachi/",
-            ),
+            resources_path: std::path::Path::new("/usr/share/elasticsearch/config/sudachi/"),
             settings_path: std::path::Path::new(
-                "/usr/share/elasticsearch/plugins/analysis-sudachi/sudachi.json",
+                "/usr/share/elasticsearch/config/sudachi/sudachi.json",
             ),
         };
 
