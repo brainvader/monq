@@ -38,8 +38,9 @@ enum FieldType {
 }
 
 #[derive(Serialize)]
-pub struct RequestBody {
+pub struct RequestBody<'a> {
     mappings: Mappings,
+    settings: Settings<'a>,
 }
 
 impl Default for RequestBody {
