@@ -53,8 +53,13 @@ fn main() -> anyhow::Result<()> {
         .with_context(|| "Failed to create elasticsearch client")?;
     let mut executor =
         tokio::runtime::Runtime::new().with_context(|| "Failed to crate tokio runtime")?;
+    let request_body = api::index::RequestBody::default();
+    let monq = api::index::Index {
+        name: "monq",
+        config: request_body,
+    };
     let response = executor
-        .block_on(api::index::create(&client, "monq"))
+        .block_on(api::index::create(&client, monq))
         .with_context(|| "Failed to create index")?;
     log::info!("{}", response);
 
