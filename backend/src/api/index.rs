@@ -22,7 +22,7 @@ pub async fn create<'a>(client: &Elasticsearch, index: Index<'a>) -> anyhow::Res
 
 pub struct Index<'a> {
     pub name: &'a str,
-    pub config: RequestBody<'a>,
+    pub config: RequestBody,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
@@ -38,12 +38,12 @@ enum FieldType {
 }
 
 #[derive(Serialize)]
-pub struct RequestBody<'a> {
+pub struct RequestBody {
     mappings: Mappings,
-    settings: Settings<'a>,
+    settings: Settings,
 }
 
-impl<'a> Default for RequestBody<'a> {
+impl Default for RequestBody {
     fn default() -> Self {
         let title = Property {
             r#type: FieldType::Text,
@@ -59,29 +59,20 @@ impl<'a> Default for RequestBody<'a> {
             question,
             answer,
         };
-        let sudachi_tokenizer = SudachiTokenizerParams {
-            r#type: "sudachi_tokenizer",
-            mode: "search",
-            discard_punctuation: true,
-            resources_path: std::path::Path::new("/usr/share/elasticsearch/config/sudachi/"),
-            settings_path: std::path::Path::new(
-                "/usr/share/elasticsearch/config/sudachi/sudachi.json",
-            ),
-        };
-
-        let sudachi_analyzer = SudachiAnalyzerParams {
-            tokenizer: sudachi_tokenizer.r#type,
-            r#type: "custom",
-            char_filter: Vec::new(),
-            token_filter: vec![
-                "sudachi_part_of_speech",
-                "sudachi_ja_stop",
-                "sudachi_baseform",
-            ],
-        };
-        let analysis = SudachiAnalysis {
-            tokenizer: SudachiTokenizer { sudachi_tokenizer },
-            analyzer: SudachiAnalyzer { sudachi_analyzer },
+        let analysis = Analysis {
+            tokenizer: Tokenizer::SudachiTokenizer {
+                r#type: "sudachi_tokenizer".to_owned(),
+                split_mode: None,
+            },
+            analyzer: Analyzer::SudachiAnalyzer {
+                filter: vec!["search".to_owned()],
+                tokenizer: "sudachi_tokenizer".to_owned(),
+                r#type: "custom".to_owned(),
+            },
+            filter: TokenFilter::Search {
+                r#type: "sudachi_split".to_owned(),
+                mode: "search".to_owned(),
+            },
         };
         let mappings = Mappings { properties };
         let settings = Settings { analysis };
@@ -114,42 +105,56 @@ pub struct Property {
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html#index-modules-settings
 // https://docs.rs/elasticsearch/7.8.0-alpha.1/elasticsearch/indices/struct.IndicesExists.html
 #[derive(Serialize)]
-pub struct Settings<'a> {
-    analysis: SudachiAnalysis<'a>,
+pub struct Settings {
+    analysis: Analysis,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-custom-analyzer.html
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/test-analyzer.html
 #[derive(Serialize)]
-pub struct SudachiAnalysis<'a> {
-    tokenizer: SudachiTokenizer<'a>,
-    analyzer: SudachiAnalyzer<'a>,
+pub struct Analysis {
+    tokenizer: Tokenizer,
+    analyzer: Analyzer,
+    filter: TokenFilter,
 }
 
 #[derive(Serialize)]
-pub struct SudachiTokenizer<'a> {
-    sudachi_tokenizer: SudachiTokenizerParams<'a>,
+#[serde(rename_all = "snake_case")]
+pub enum Tokenizer {
+    SudachiTokenizer {
+        r#type: String,
+        #[serde(skip_serializing_if = "Option::is_none")]
+        split_mode: Option<String>,
+    },
 }
 
 #[derive(Serialize)]
-pub struct SudachiTokenizerParams<'a> {
-    r#type: &'a str,
-    mode: &'a str,
-    discard_punctuation: bool,
-    resources_path: &'a std::path::Path,
-    settings_path: &'a std::path::Path,
+#[serde(rename_all = "snake_case")]
+pub enum Analyzer {
+    SudachiAnalyzer {
+        filter: Vec<String>,
+        tokenizer: String,
+        r#type: String,
+    },
 }
 
 #[derive(Serialize)]
-pub struct SudachiAnalyzer<'a> {
-    sudachi_analyzer: SudachiAnalyzerParams<'a>,
-}
-
-#[derive(Serialize)]
-pub struct SudachiAnalyzerParams<'a> {
-    tokenizer: &'a str,
-    r#type: &'a str,
-    char_filter: Vec<&'a str>,
-    #[serde(rename = "filter")]
-    token_filter: Vec<&'a str>,
+#[serde(rename_all = "snake_case")]
+pub enum TokenFilter {
+    Search {
+        r#type: String,
+        mode: String,
+    },
+    Synonym {
+        r#type: String,
+        synonyms: Vec<String>,
+    },
+    RomajiReadingForm {
+        r#type: String,
+        use_romaji: bool,
+    },
+    KatakanaReadingForm {
+        r#type: String,
+        use_romaji: bool,
+    },
 }
