@@ -85,6 +85,14 @@ pub struct Property {
     // analyzer: String,
 }
 
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-custom-analyzer.html
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/test-analyzer.html
+#[derive(Serialize)]
+pub struct SudachiAnalysis<'a> {
+    tokenizer: SudachiTokenizer<'a>,
+    analyzer: SudachiAnalyzer<'a>,
+}
+
 #[derive(Serialize)]
 pub struct SudachiTokenizer<'a> {
     sudachi_tokenizer: SudachiTokenizerParams<'a>,
