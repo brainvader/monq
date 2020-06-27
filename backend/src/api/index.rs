@@ -91,6 +91,7 @@ pub struct Properties {
     title: Property,
     question: Property,
     answer: Property,
+    tags: Property,
 }
 
 // Mapping parameters
