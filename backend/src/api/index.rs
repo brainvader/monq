@@ -28,7 +28,7 @@ pub struct Index<'a> {
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
 #[derive(Serialize)]
 #[serde(tag = "type", rename_all = "lowercase")]
-enum FieldType {
+pub enum FieldType {
     Text,
     Keyword,
     Date,
