@@ -45,20 +45,6 @@ pub struct RequestBody {
 
 impl Default for RequestBody {
     fn default() -> Self {
-        let title = Property {
-            r#type: FieldType::Text,
-        };
-        let question = Property {
-            r#type: FieldType::Text,
-        };
-        let answer = Property {
-            r#type: FieldType::Text,
-        };
-        let properties = Properties {
-            title,
-            question,
-            answer,
-        };
         let analysis = Analysis {
             tokenizer: Tokenizer::SudachiTokenizer {
                 r#type: "sudachi_tokenizer".to_owned(),
@@ -105,7 +91,6 @@ impl Default for RequestBody {
 // Mapping parameters
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
-// #[serde(rename = "mappings")]
 pub struct Mappings {
     properties: Properties,
 }
@@ -118,15 +103,12 @@ pub struct Properties {
     tags: FieldType,
 }
 
-// Mapping parameters
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
 #[serde(untagged)]
 pub enum Property {
     Title { proeprties: Cell },
     Question { properties: Cell },
     Answer { properties: Cell },
-    Tags { r#type: FieldType },
 }
 
 #[derive(Serialize, Clone)]
