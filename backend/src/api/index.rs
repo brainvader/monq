@@ -80,6 +80,8 @@ impl Default for RequestBody {
     }
 }
 
+// Mapping parameters
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
 // #[serde(rename = "mappings")]
 pub struct Mappings {
