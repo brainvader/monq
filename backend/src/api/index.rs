@@ -74,7 +74,29 @@ impl Default for RequestBody {
                 mode: "search".to_owned(),
             },
         };
-        let mappings = Mappings { properties };
+        let cell = Cell {
+            r#type: FieldType::Text,
+            content: FieldType::Text,
+        };
+        let title = Property::Title {
+            proeprties: cell.clone(),
+        };
+        let question = Property::Question {
+            properties: cell.clone(),
+        };
+        let answer = Property::Answer { properties: cell };
+        let tags = Property::Tags {
+            r#type: FieldType::Keyword,
+        };
+
+        let mappings = Mappings {
+            properties: Properties {
+                title,
+                question,
+                answer,
+                tags,
+            },
+        };
         let settings = Settings { analysis };
         Self { mappings, settings }
     }
