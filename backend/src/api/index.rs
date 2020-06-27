@@ -72,8 +72,6 @@ impl Default for RequestBody {
         };
         let answer = Property::Answer { properties: cell };
         let tags = FieldType::Keyword;
-            r#type: FieldType::Keyword,
-        };
 
         let mappings = Mappings {
             properties: Properties {
