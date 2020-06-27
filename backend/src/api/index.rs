@@ -96,7 +96,7 @@ pub struct Properties {
 // Mapping parameters
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
-pub struct Property {
+#[serde(untagged)]
 pub enum Property {
     Title { proeprties: Cell },
     Question { properties: Cell },
