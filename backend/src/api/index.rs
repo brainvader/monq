@@ -65,7 +65,7 @@ impl Default for RequestBody {
             content: FieldType::Text,
         };
         let title = Property::Title {
-            proeprties: cell.clone(),
+            properties: cell.clone(),
         };
         let question = Property::Question {
             properties: cell.clone(),
@@ -104,7 +104,7 @@ pub struct Properties {
 #[derive(Serialize)]
 #[serde(untagged)]
 pub enum Property {
-    Title { proeprties: Cell },
+    Title { properties: Cell },
     Question { properties: Cell },
     Answer { properties: Cell },
 }
