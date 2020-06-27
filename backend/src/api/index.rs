@@ -26,9 +26,9 @@ pub struct Index<'a> {
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-types.html
-#[derive(Serialize)]
+#[derive(Serialize, Clone)]
 #[serde(tag = "type", rename_all = "lowercase")]
-enum FieldType {
+pub enum FieldType {
     Text,
     Keyword,
     Date,
@@ -45,20 +45,6 @@ pub struct RequestBody {
 
 impl Default for RequestBody {
     fn default() -> Self {
-        let title = Property {
-            r#type: FieldType::Text,
-        };
-        let question = Property {
-            r#type: FieldType::Text,
-        };
-        let answer = Property {
-            r#type: FieldType::Text,
-        };
-        let properties = Properties {
-            title,
-            question,
-            answer,
-        };
         let analysis = Analysis {
             tokenizer: Tokenizer::SudachiTokenizer {
                 r#type: "sudachi_tokenizer".to_owned(),
@@ -74,14 +60,35 @@ impl Default for RequestBody {
                 mode: "search".to_owned(),
             },
         };
-        let mappings = Mappings { properties };
+        let cell = Cell {
+            r#type: FieldType::Text,
+            content: FieldType::Text,
+        };
+        let title = Property::Title {
+            properties: cell.clone(),
+        };
+        let question = Property::Question {
+            properties: cell.clone(),
+        };
+        let answer = Property::Answer { properties: cell };
+        let tags = FieldType::Keyword;
+
+        let mappings = Mappings {
+            properties: Properties {
+                title,
+                question,
+                answer,
+                tags,
+            },
+        };
         let settings = Settings { analysis };
         Self { mappings, settings }
     }
 }
 
+// Mapping parameters
+// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
-// #[serde(rename = "mappings")]
 pub struct Mappings {
     properties: Properties,
 }
@@ -91,15 +98,21 @@ pub struct Properties {
     title: Property,
     question: Property,
     answer: Property,
+    tags: FieldType,
 }
 
-// Mapping parameters
-// https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
-pub struct Property {
-    #[serde(flatten)]
+#[serde(untagged)]
+pub enum Property {
+    Title { properties: Cell },
+    Question { properties: Cell },
+    Answer { properties: Cell },
+}
+
+#[derive(Serialize, Clone)]
+pub struct Cell {
     r#type: FieldType,
-    // analyzer: String,
+    content: FieldType,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html#index-modules-settings
