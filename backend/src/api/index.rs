@@ -85,7 +85,7 @@ impl Default for RequestBody {
             properties: cell.clone(),
         };
         let answer = Property::Answer { properties: cell };
-        let tags = Property::Tags {
+        let tags = FieldType::Keyword;
             r#type: FieldType::Keyword,
         };
 
@@ -115,7 +115,7 @@ pub struct Properties {
     title: Property,
     question: Property,
     answer: Property,
-    tags: Property,
+    tags: FieldType,
 }
 
 // Mapping parameters
