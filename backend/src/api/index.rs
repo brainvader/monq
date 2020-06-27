@@ -97,9 +97,17 @@ pub struct Properties {
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping-params.html
 #[derive(Serialize)]
 pub struct Property {
-    #[serde(flatten)]
+pub enum Property {
+    Title { proeprties: Cell },
+    Question { properties: Cell },
+    Answer { properties: Cell },
+    Tags { r#type: FieldType },
+}
+
+#[derive(Serialize, Clone)]
+pub struct Cell {
     r#type: FieldType,
-    // analyzer: String,
+    content: FieldType,
 }
 
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/index-modules.html#index-modules-settings
