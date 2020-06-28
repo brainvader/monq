@@ -28,6 +28,20 @@ command = "curl"
 args = [
     "-I", "localhost:9200/monq?pretty"
 ]
+
+[tasks.create-index]
+description = "Create index"
+dependencies = ["docker-compose-up"]
+cwd = "./docker/elasticsearch"
+workspace = false
+condtion = { env_set = ["ES_HOST", "ES_PORT"]}
+command = "curl"
+args = [
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq",
+    "-H", "Content-Type: application/json",
+    "-d", "@index.json"
+]
+
 [tasks.start]
 description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
