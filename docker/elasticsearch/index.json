@@ -1,0 +1,39 @@
+{
+    "mappings": {
+        "properties": {
+            "title": {
+                "properties": {
+                    "type": {
+                        "type": "text"
+                    },
+                    "content": {
+                        "type": "text"
+                    }
+                }
+            },
+            "question": {
+                "properties": {
+                    "type": {
+                        "type": "text"
+                    },
+                    "content": {
+                        "type": "text"
+                    }
+                }
+            },
+            "answer": {
+                "properties": {
+                    "type": {
+                        "type": "text"
+                    },
+                    "content": {
+                        "type": "text"
+                    }
+                }
+            },
+            "tags": {
+                "type": "keyword"
+            }
+        }
+    }
+}
