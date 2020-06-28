@@ -18,6 +18,16 @@ args = [
     "up", "-d"
 ]
 
+# TODO: Need rust commnad line tool to setup index
+[tasks.check-index]
+description = "Make sure the existence of index"
+condtion = { env_set = ["ES_HOST", "ES_PORT"] }
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-I", "localhost:9200/monq?pretty"
+]
 [tasks.start]
 description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
