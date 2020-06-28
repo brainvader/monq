@@ -35,5 +35,29 @@
                 "type": "keyword"
             }
         }
+    },
+    "settings": {
+        "analysis": {
+            "tokenizer": {
+                "sudachi_tokenizer": {
+                    "type": "sudachi_tokenizer"
+                }
+            },
+            "analyzer": {
+                "sudachi_analyzer": {
+                    "filter": [
+                        "search"
+                    ],
+                    "tokenizer": "sudachi_tokenizer",
+                    "type": "custom"
+                }
+            },
+            "filter": {
+                "search": {
+                    "type": "sudachi_split",
+                    "mode": "search"
+                }
+            }
+        }
     }
 }
