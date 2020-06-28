@@ -23,11 +23,13 @@ services:
             # - xpack.security.enabled=false
             - bootstrap.memory_lock=true
             # - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        env_file:
+            - "../.env"
         volumes:
             - monq:/usr/share/elasticsearch/data
         # Port forwarding
         ports:
-            - 9200:9200
+            - ${ES_PORT}:${ES_PORT}
         ulimits:
             memlock:
                 soft: -1

@@ -18,6 +18,39 @@ args = [
     "up", "-d"
 ]
 
+# TODO: Need rust commnad line tool to setup index
+[tasks.check-index]
+description = "Make sure the existence of index"
+condtion = { env_set = ["ES_HOST", "ES_PORT"] }
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-I", "localhost:9200/monq?pretty"
+]
+
+[tasks.create-index]
+description = "Create index"
+dependencies = ["docker-compose-up"]
+cwd = "./docker/elasticsearch"
+workspace = false
+condtion = { env_set = ["ES_HOST", "ES_PORT"]}
+command = "curl"
+args = [
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq",
+    "-H", "Content-Type: application/json",
+    "-d", "@index.json"
+]
+
+[tasks.delete-index]
+description = "Delete index"
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-X", "DELETE", "${ES_HOST}:${ES_PORT}/monq?pretty",
+]
+
 [tasks.start]
 description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
