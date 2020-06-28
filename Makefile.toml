@@ -42,6 +42,15 @@ args = [
     "-d", "@index.json"
 ]
 
+[tasks.delete-index]
+description = "Delete index"
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-X", "DELETE", "${ES_HOST}:${ES_PORT}/monq?pretty",
+]
+
 [tasks.start]
 description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
