@@ -1,0 +1,13 @@
+{
+    "analyzer": "sudachi_analyzer",
+    "text": [
+        "MonQはクイズ・ベースの学習システムです.",
+        "様々な科目をクイズとして学べます.",
+        "例えばプログラミングです.",
+        "struct AnyHuman<'a, T> where T: Debug + Clone + Copy {",
+        "    name: &'a str",
+        "    age : i32",
+        "}",
+        "このように表記できます."
+    ]
+}

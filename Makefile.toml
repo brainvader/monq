@@ -51,6 +51,28 @@ args = [
     "-X", "DELETE", "${ES_HOST}:${ES_PORT}/monq?pretty",
 ]
 
+[tasks.db-seed]
+description = "Seed database"
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pretty",
+    "-H", "Content-Type: application/json",
+    "-d", "@db/what-is-monq.json"
+]
+
+[tasks.test-sudachi]
+description = "Test sudachi analyzer"
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-X", "POST", "localhost:9200/monq/_analyze?pretty",
+    "-H", "Content-Type: application/json",
+    "-d", "@${@}"
+]
+
 [tasks.start]
 description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped

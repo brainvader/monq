@@ -1,0 +1,10 @@
+{
+    "analyzer": "sudachi_analyzer",
+    "text": [
+        "struct HumanData<'a, T> where T: Copy + Debug {",
+        "    first: &'a str",
+        "    last: &'a str",
+        "    age: i32",
+        "}"
+    ]
+}
