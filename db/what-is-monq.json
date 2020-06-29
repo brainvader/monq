@@ -1,0 +1,38 @@
+{
+    "title": {
+        "type": "text",
+        "content": "MonQとは?"
+    },
+    "question": [
+        {
+            "type": "text",
+            "content": "MonQとは?"
+        }
+    ],
+    "answer": [
+        {
+            "type": "text",
+            "content": "MonQはクイズ・ベースの学習システムです."
+        },
+        {
+            "type": "text",
+            "content": "様々なコンテンツを学ぶことができます. 次のようにコードを表示することもできます."
+        },
+        {
+            "type": "code",
+            "content": [
+                "struct TestData<'a> {",
+                "    field1: &'a str,",
+                "    field2: i32",
+                "}"
+            ]
+        },
+        {
+            "type": "math",
+            "content": "$f(x) = x^2$"
+        }
+    ],
+    "tags": [
+        "tutorial"
+    ]
+}
