@@ -51,6 +51,17 @@ args = [
     "-X", "DELETE", "${ES_HOST}:${ES_PORT}/monq?pretty",
 ]
 
+[tasks.db-seed]
+description = "Seed database"
+dependencies = ["docker-compose-up"]
+workspace = false
+command = "curl"
+args = [
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pretty",
+    "-H", "Content-Type: application/json",
+    "-d", "@db/what-is-monq.json"
+]
+
 [tasks.test-sudachi]
 description = "Test sudachi analyzer"
 dependencies = ["docker-compose-up"]
