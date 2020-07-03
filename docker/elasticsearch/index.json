@@ -47,7 +47,8 @@
                 "sudachi_analyzer": {
                     "filter": [
                         "search",
-                        "pos"
+                        "pos",
+                        "stop"
                     ],
                     "tokenizer": "sudachi_tokenizer",
                     "type": "custom"
@@ -65,6 +66,12 @@
                         "助動詞",
                         "補助記号,句点",
                         "補助記号,読点"
+                    ]
+                },
+                "stop": {
+                    "type": "sudachi_ja_stop",
+                    "stopwords": [
+                        "_japanese_"
                     ]
                 }
             }
