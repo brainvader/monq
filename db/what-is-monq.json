@@ -1,25 +1,25 @@
 {
     "title": {
-        "type": "text",
+        "cell_type": "text",
         "content": "MonQとは?"
     },
     "question": [
         {
-            "type": "text",
+            "cell_type": "text",
             "content": "MonQとは?"
         }
     ],
     "answer": [
         {
-            "type": "text",
+            "cell_type": "text",
             "content": "MonQはクイズ・ベースの学習システムです."
         },
         {
-            "type": "text",
+            "cell_type": "text",
             "content": "様々なコンテンツを学ぶことができます. 次のようにコードを表示することもできます."
         },
         {
-            "type": "code",
+            "cell_type": "rust",
             "content": [
                 "struct TestData<'a> {",
                 "    field1: &'a str,",
@@ -28,7 +28,7 @@
             ]
         },
         {
-            "type": "math",
+            "cell_type": "math",
             "content": "$f(x) = x^2$"
         }
     ],
