@@ -46,7 +46,8 @@
             "analyzer": {
                 "sudachi_analyzer": {
                     "filter": [
-                        "search"
+                        "search",
+                        "pos"
                     ],
                     "tokenizer": "sudachi_tokenizer",
                     "type": "custom"
@@ -56,6 +57,15 @@
                 "search": {
                     "type": "sudachi_split",
                     "mode": "search"
+                },
+                "pos": {
+                    "type": "sudachi_part_of_speech",
+                    "stoptags": [
+                        "助詞",
+                        "助動詞",
+                        "補助記号,句点",
+                        "補助記号,読点"
+                    ]
                 }
             }
         }
