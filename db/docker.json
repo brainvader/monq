@@ -1,0 +1,23 @@
+{
+    "title": {
+        "cell_type": "text",
+        "content": "Dockerの起動"
+    },
+    "question": [
+        {
+            "cell_type": "text",
+            "format": "inline",
+            "content": "Dockerを起動するにはどうすれば良いでしょうか?"
+        }
+    ],
+    "answer": [
+        {
+            "cell_type": "docker",
+            "format": "inline",
+            "content": "docker run"
+        }
+    ],
+    "tags": [
+        "docker"
+    ]
+}
