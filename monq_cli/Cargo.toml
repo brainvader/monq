@@ -1,5 +1,5 @@
 [package]
-name = "cli"
+name = "monq_cli"
 description = "Comand line interface for monq to setup database"
 version = "0.1.0"
 authors = ["BrainVader <brainvade@gmail.com>"]
