@@ -29,6 +29,17 @@ args = [
     "-I", "localhost:9200/monq?pretty"
 ]
 
+[tasks.create-pipline]
+description = "Define pipeline"
+workspace = false
+cwd = "./docker/elasticsearch"
+command = "curl"
+args = [
+    "-X", "PUT", "localhost:9200/_ingest/pipeline/remove_pipeline_id?pretty",
+    "-H", "Content-Type: application/json", 
+    "-d", "@pipeline.json"
+]
+
 [tasks.create-index]
 description = "Create index"
 dependencies = ["docker-compose-up"]
