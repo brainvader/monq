@@ -25,3 +25,5 @@ elasticsearch = "7.8.0-alpha.1"
 anyhow = "1.0.31"
 futures = "0.3.5"
 async-trait = "0.1.36"
+
+shared = { path = "../shared" }
