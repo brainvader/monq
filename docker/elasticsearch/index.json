@@ -3,7 +3,7 @@
         "properties": {
             "title": {
                 "properties": {
-                    "type": {
+                    "cell_type": {
                         "type": "text"
                     },
                     "content": {
@@ -13,7 +13,10 @@
             },
             "question": {
                 "properties": {
-                    "type": {
+                    "cell_type": {
+                        "type": "text"
+                    },
+                    "format": {
                         "type": "text"
                     },
                     "content": {
@@ -23,7 +26,10 @@
             },
             "answer": {
                 "properties": {
-                    "type": {
+                    "cell_type": {
+                        "type": "text"
+                    },
+                    "format": {
                         "type": "text"
                     },
                     "content": {
@@ -46,7 +52,9 @@
             "analyzer": {
                 "sudachi_analyzer": {
                     "filter": [
-                        "search"
+                        "search",
+                        "pos",
+                        "stop"
                     ],
                     "tokenizer": "sudachi_tokenizer",
                     "type": "custom"
@@ -56,6 +64,21 @@
                 "search": {
                     "type": "sudachi_split",
                     "mode": "search"
+                },
+                "pos": {
+                    "type": "sudachi_part_of_speech",
+                    "stoptags": [
+                        "助詞",
+                        "助動詞",
+                        "補助記号,句点",
+                        "補助記号,読点"
+                    ]
+                },
+                "stop": {
+                    "type": "sudachi_ja_stop",
+                    "stopwords": [
+                        "_japanese_"
+                    ]
                 }
             }
         }

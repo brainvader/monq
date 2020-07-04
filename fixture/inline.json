@@ -1,0 +1,7 @@
+{
+    "analyzer": "whitespace",
+    "text": [
+        "docker-compose -d up",
+        "ls -la"
+    ]
+}
