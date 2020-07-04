@@ -16,6 +16,9 @@
                     "cell_type": {
                         "type": "text"
                     },
+                    "format": {
+                        "type": "text"
+                    },
                     "content": {
                         "type": "text"
                     }
@@ -24,6 +27,9 @@
             "answer": {
                 "properties": {
                     "cell_type": {
+                        "type": "text"
+                    },
+                    "format": {
                         "type": "text"
                     },
                     "content": {
