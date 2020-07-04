@@ -73,6 +73,16 @@ args = [
     "-d", "@db/what-is-monq.json"
 ]
 
+[tasks.index-flow]
+description = "Set up index"
+workspace = false
+script = [
+    "cargo make delete-index",
+    "cargo make create-pipline",
+    "cargo make create-index",
+    "cargo make db-seed"
+]
+
 [tasks.test-sudachi]
 description = "Test sudachi analyzer"
 dependencies = ["docker-compose-up"]
