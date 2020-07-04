@@ -9,5 +9,6 @@ edition = "2018"
 [dependencies]
 url = "2.1.1"
 anyhow = "1.0.31"
+serde = "1.0.110"
 
 elasticsearch = "7.8.0-alpha.1"
