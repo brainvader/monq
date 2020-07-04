@@ -9,5 +9,6 @@ edition = "2018"
 
 [dependencies]
 tokio = "0.2.21" 
+clap = "2.33.1"
 
 shared = { path = "../shared"}
