@@ -2,10 +2,25 @@ use elasticsearch::http::response::Response;
 use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::Elasticsearch;
 
+use anyhow::Context;
 use serde::Serialize;
 use url::Url;
 
 const INDEX_NAME: &str = "monq";
+const ES_HOST: &str = "ES_HOST";
+const ES_PORT: &str = "ES_PORT";
+
+pub fn get_env_var(key: &str) -> anyhow::Result<String> {
+    let value = dotenv::var(key).with_context(|| format!("Failed to find key: {}", key))?;
+    Ok(value)
+}
+
+pub fn get_es_url() -> anyhow::Result<Url> {
+    let es_host = get_env_var(ES_HOST)?;
+    let es_port = get_env_var(ES_PORT)?;
+    let es_addr = format!("http://{}:{}", es_host, es_port);
+    Ok(Url::parse(&es_addr)?)
+}
 
 pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
     let conn_pool = SingleNodeConnectionPool::new(url);
