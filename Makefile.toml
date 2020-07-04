@@ -73,6 +73,16 @@ args = [
     "-d", "@db/what-is-monq.json"
 ]
 
+[tasks.put-doc]
+description = "Put document to index monq"
+workspace = false
+command = "curl"
+args = [
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pipeline=remove_pipeline_id&pretty=true",
+    "-H", "Content-Type: application/json",
+    "-d", "@${@}"
+]
+
 [tasks.index-flow]
 description = "Set up index"
 workspace = false
