@@ -83,6 +83,15 @@ script = [
     "cargo make db-seed"
 ]
 
+[tasks.search]
+workspace = false
+command = "curl"
+args = [
+    "-X", "GET", "localhost:9200/_search?pretty",
+    "-H", "Content-Type: application/json",
+    "-d", "@${@}"
+]
+
 [tasks.test-sudachi]
 description = "Test sudachi analyzer"
 dependencies = ["docker-compose-up"]
