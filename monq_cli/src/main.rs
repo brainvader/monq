@@ -6,6 +6,7 @@ use shared::{log_info, setup_logger};
 
 #[tokio::main]
 async fn main() {
+fn main() -> anyhow::Result<()> {
     setup_logger().with_context(|| "failed to setup logger")?;
     let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
     let client = create_elasticsearch_client(url)
@@ -22,4 +23,5 @@ async fn main() {
 
     let matches = monq_cmd.get_matches();
 
+    Ok(())
 }
