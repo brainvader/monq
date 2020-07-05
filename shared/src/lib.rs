@@ -3,6 +3,7 @@ use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, Trans
 use elasticsearch::Elasticsearch;
 
 use anyhow::Context;
+use log::info;
 use serde::Serialize;
 use url::Url;
 
@@ -19,6 +20,10 @@ pub fn setup_logger() -> dotenv::Result<()> {
     std::env::set_var(DEFAULT_WRITE_STYLE_ENV, log_style);
     env_logger::builder().init();
     Ok(())
+}
+
+pub fn log_info(log_message: &str) {
+    info!("{}", log_message);
 }
 
 pub fn get_env_var(key: &str) -> anyhow::Result<String> {
