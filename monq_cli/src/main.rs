@@ -10,7 +10,8 @@ async fn main() {
     let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
     let client = create_elasticsearch_client(url)
         .with_context(|| "failed to create elasticsearch client")?;
-    let rt = tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime");
+    let mut rt =
+        tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime")?;
 
     let setup_cmd = App::new("setup").about("Setup index for monq");
     let monq_cmd = App::new("monq")
