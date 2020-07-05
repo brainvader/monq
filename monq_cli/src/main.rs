@@ -26,5 +26,10 @@ fn main() -> anyhow::Result<()> {
 
     let matches = monq_cmd.get_matches();
 
+    match matches.subcommand_name() {
+        Some("setup") => rt.block_on(setup())?,
+        None => log_info(&"No Subcommand Provided"),
+        _ => unreachable!(),
+    }
     Ok(())
 }
