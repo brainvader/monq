@@ -13,10 +13,12 @@ async fn main() {
     let rt = tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime");
 
     let setup_cmd = App::new("setup").about("Setup index for monq");
-    App::new("monq")
+    let monq_cmd = App::new("monq")
         .version("0.1")
         .about("command line interface for monq")
         .author("BrainVader")
-        .subcommand(setup_cmd)
-        .get_matches();
+        .subcommand(setup_cmd);
+
+    let matches = monq_cmd.get_matches();
+
 }
