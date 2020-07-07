@@ -1,19 +1,21 @@
 use anyhow::Context;
 use clap::App;
 
+use shared::create_index;
 use shared::{create_elasticsearch_client, get_es_url};
 use shared::{log_info, setup_logger};
 
 async fn setup() -> anyhow::Result<()> {
-    log_info(&format!("{}", "setup monq"));
+    let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
+    let client = create_elasticsearch_client(url)
+        .with_context(|| "failed to create elasticsearch client")?;
+    let response_body = create_index(&client, "./elasticsearch/index.json").await?;
+    log_info(&format!("{}", response_body));
     Ok(())
 }
 
 fn main() -> anyhow::Result<()> {
     setup_logger().with_context(|| "failed to setup logger")?;
-    let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
-    let client = create_elasticsearch_client(url)
-        .with_context(|| "failed to create elasticsearch client")?;
     let mut rt =
         tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime")?;
 
