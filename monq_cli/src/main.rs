@@ -15,7 +15,9 @@ async fn setup() -> anyhow::Result<()> {
             .with_context(|| "failed to delete monq")?;
         log_info(&format!("Delete: {}", response_body));
     }
-    let response_body = create_index(&client, "./elasticsearch/index.json").await?;
+    let response_body = create_index(&client, "./elasticsearch/index.json")
+        .await
+        .with_context(|| "failed to create monq")?;
     log_info(&format!("{}", response_body));
     Ok(())
 }
