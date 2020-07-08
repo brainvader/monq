@@ -1,6 +1,6 @@
 use elasticsearch::http::response::Response;
 use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
-use elasticsearch::indices::IndicesCreateParts;
+use elasticsearch::indices::{IndicesCreateParts, IndicesDeleteParts};
 use elasticsearch::Elasticsearch;
 
 use anyhow::Context;
@@ -46,6 +46,13 @@ pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError
     let conn_pool = SingleNodeConnectionPool::new(url);
     let transport = TransportBuilder::new(conn_pool).disable_proxy().build()?;
     Ok(Elasticsearch::new(transport))
+}
+
+pub async fn delete_monq(client: &Elasticsearch) -> anyhow::Result<serde_json::Value> {
+    let parts = IndicesDeleteParts::Index(&[INDEX_NAME]);
+    let response = client.indices().delete(parts).send().await?;
+    let response_body = response.json::<serde_json::Value>().await?;
+    Ok(response_body)
 }
 
 pub async fn create_index(client: &Elasticsearch, index_path: &str) -> anyhow::Result<serde_json::Value> {
