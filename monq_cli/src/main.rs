@@ -1,8 +1,9 @@
 use anyhow::Context;
 use clap::App;
 
-use shared::create_index;
 use shared::run_docker_compose;
+use shared::{create_elasticsearch_client, get_es_url};
+use shared::{create_index, delete_monq};
 use shared::{log_info, setup_logger};
 
 async fn setup() -> anyhow::Result<()> {
