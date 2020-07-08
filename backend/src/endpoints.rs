@@ -6,6 +6,8 @@ use futures::future::TryFutureExt;
 use super::clean::entity::{Cell, Quiz, QuizTitle};
 use super::context::QuizController;
 
+use shared::log_info;
+
 #[get("/")]
 pub async fn index() -> impl actix_web::Responder {
     let mut builder = HttpResponse::Ok();
@@ -43,7 +45,7 @@ pub async fn cat(controller: web::Data<QuizController>) -> impl actix_web::Respo
 
     match result {
         Ok(response_body) => {
-            log::info!("response body: {:#?}", response_body);
+            log_info(&format!("response body: {:#?}", response_body));
             let mut builder = HttpResponse::Ok();
             let mime_type: http::header::ContentType = http::header::ContentType::json();
             builder
@@ -51,7 +53,7 @@ pub async fn cat(controller: web::Data<QuizController>) -> impl actix_web::Respo
                 .json(response_body)
         }
         Err(e) => {
-            log::info!("failed to cat, error: {:?}", &e);
+            log_info(&format!("failed to cat, error: {:?}", &e));
             HttpResponse::NotFound().finish()
         }
     }
@@ -76,15 +78,15 @@ pub async fn get_quiz(req: HttpRequest, id: web::Path<String>) -> impl actix_web
         question,
         answer,
     };
-    log::info!("Get Quizzes");
-    log::info!("{:?}", id);
+    log_info(&"Get Quizzes");
+    log_info(&format!("{:?}", id));
     HttpResponse::Ok().json(quiz)
 }
 
 #[post("/quizzes")]
 pub async fn post_quiz(quiz: web::Json<Quiz>) -> impl actix_web::Responder {
-    log::info!("Posted");
-    log::info!("{:?}", quiz.id);
+    log_info(&"Posted");
+    log_info(&format!("{:?}", quiz.id));
     let mut builder = HttpResponse::Ok();
     let mime_type = http::header::ContentType::json();
     builder

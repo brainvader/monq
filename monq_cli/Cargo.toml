@@ -1,0 +1,18 @@
+[package]
+name = "monq_cli"
+description = "Comand line interface for monq to setup database"
+version = "0.1.0"
+authors = ["BrainVader <brainvade@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "monq"
+path = "src/main.rs"
+doc = false
+
+[dependencies]
+tokio = { version = "*", features = ["full"] }
+clap = "2.33.1"
+anyhow = "1.0.31" 
+
+shared = { path = "../shared"}

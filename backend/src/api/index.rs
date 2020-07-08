@@ -2,12 +2,14 @@ use elasticsearch::indices::IndicesCreateParts;
 use elasticsearch::Elasticsearch;
 use serde::Serialize;
 
+use shared::log_info;
+
 // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-create-index.html
 // https://docs.rs/elasticsearch/7.8.0-alpha.1/elasticsearch/indices/struct.Indices.html#method.create
 pub async fn create<'a>(client: &Elasticsearch, index: Index<'a>) -> anyhow::Result<String> {
     let request_body = index.config;
     let rb_str = serde_json::to_string_pretty(&request_body);
-    log::info!("request_body \n {}", rb_str.unwrap());
+    log_info(&format!("request_body \n {}", rb_str.unwrap()));
 
     let parts = IndicesCreateParts::Index(index.name);
     let response = client

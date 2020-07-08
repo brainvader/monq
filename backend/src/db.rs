@@ -4,18 +4,10 @@
 // https://docs.rs/elasticsearch/7.7.0-alpha.1/elasticsearch/#create-a-client
 
 use async_trait::async_trait;
-use elasticsearch::http::transport::{BuildError, SingleNodeConnectionPool, TransportBuilder};
 use elasticsearch::Elasticsearch;
-use url::Url;
 
 use super::clean::entity;
 use super::clean::interface::{ESHandle, IndexResponseBody, ResponseBody};
-
-pub fn create_elasticsearch_client(url: Url) -> Result<Elasticsearch, BuildError> {
-    let conn_pool = SingleNodeConnectionPool::new(url);
-    let transport = TransportBuilder::new(conn_pool).disable_proxy().build()?;
-    Ok(Elasticsearch::new(transport))
-}
 
 #[derive(Clone)]
 pub struct ESHandler {
