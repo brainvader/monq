@@ -2,13 +2,19 @@ use anyhow::Context;
 use clap::App;
 
 use shared::create_index;
-use shared::{create_elasticsearch_client, get_es_url};
+use shared::{create_elasticsearch_client, get_es_url, delete_monq};
 use shared::{log_info, setup_logger};
 
 async fn setup() -> anyhow::Result<()> {
     let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
     let client = create_elasticsearch_client(url)
         .with_context(|| "failed to create elasticsearch client")?;
+    {
+        let response_body = delete_monq(&client)
+            .await
+            .with_context(|| "failed to delete monq")?;
+        log_info(&format!("Delete: {}", response_body));
+    }
     let response_body = create_index(&client, "./elasticsearch/index.json").await?;
     log_info(&format!("{}", response_body));
     Ok(())
