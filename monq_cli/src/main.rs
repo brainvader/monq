@@ -1,10 +1,10 @@
 use anyhow::Context;
 use clap::App;
 
+use shared::es::api::create_elasticsearch_client;
+use shared::es::api::{create_index, delete_monq};
 use shared::run_docker_compose;
-use shared::{create_elasticsearch_client, get_es_url};
-use shared::{create_index, delete_monq};
-use shared::{log_info, setup_logger};
+use shared::{get_es_url, log_info, setup_logger};
 
 async fn setup() -> anyhow::Result<()> {
     let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;

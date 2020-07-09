@@ -6,8 +6,9 @@
 use async_trait::async_trait;
 use elasticsearch::Elasticsearch;
 
-use super::clean::interface::{ESHandle, IndexResponseBody, ResponseBody};
+use super::clean::interface::{ESHandle, ResponseBody};
 use shared::entity;
+use shared::es::model::PostResponseBody;
 
 #[derive(Clone)]
 pub struct ESHandler {
@@ -24,7 +25,7 @@ async fn get(client: &Elasticsearch, id: &str) -> anyhow::Result<entity::Quiz> {
 async fn post(client: &Elasticsearch, quiz: &entity::Quiz) -> anyhow::Result<entity::Quiz> {
     let index_parts = elasticsearch::IndexParts::IndexId("monq", &quiz.id);
     let response = client.index(index_parts).body(quiz).send().await?;
-    let _ = response.json::<IndexResponseBody>().await?;
+    let _ = response.json::<PostResponseBody>().await?;
     let clone = quiz.to_owned();
     Ok(clone)
 }
