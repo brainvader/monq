@@ -35,6 +35,15 @@ pub fn get_env_var(key: &str) -> anyhow::Result<String> {
     Ok(value)
 }
 
+pub fn run_docker_compose() -> anyhow::Result<std::process::ExitStatus> {
+    let mut docker_compose = std::process::Command::new("docker-compose");
+    let status = docker_compose
+        .args(&["-f", "docker/docker-compose.yaml", "up", "-d"])
+        .status()
+        .with_context(|| "failed to get docker-compose up and running")?;
+    Ok(status)
+}
+
 pub fn get_es_url() -> anyhow::Result<Url> {
     let es_host = get_env_var(ES_HOST)?;
     let es_port = get_env_var(ES_PORT)?;
