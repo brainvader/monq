@@ -10,7 +10,7 @@ use url::Url;
 use std::fs::File;
 use std::io::BufReader;
 
-use super::model::PostResponseBody;
+use super::models;
 
 const INDEX_NAME: &str = "monq";
 
@@ -55,12 +55,12 @@ pub async fn post_doc<T>(
     client: &Elasticsearch,
     doc: &T,
     doc_id: &str,
-) -> anyhow::Result<PostResponseBody>
+) -> anyhow::Result<models::post::ResponseBody>
 where
     T: Serialize,
 {
     let index_parts = elasticsearch::IndexParts::IndexId(INDEX_NAME, doc_id);
     let response = client.index(index_parts).body(doc).send().await?;
-    let response_body = response.json::<PostResponseBody>().await?;
+    let response_body = response.json::<models::post::ResponseBody>().await?;
     Ok(response_body)
 }
