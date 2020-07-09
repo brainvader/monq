@@ -8,7 +8,7 @@ pub struct Shard {
 }
 
 #[derive(Deserialize)]
-pub struct PostResponseBody {
+pub struct ResponseBody {
     #[serde(alias = "_index")]
     pub index: String,
     #[serde(alias = "_type")]
