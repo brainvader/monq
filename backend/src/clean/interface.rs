@@ -1,6 +1,6 @@
 // FIXME: Leak entity from domain layer
-use super::entity;
 use super::usecases;
+use shared::entity;
 
 use async_trait::async_trait;
 use serde::{Deserialize, Serialize};

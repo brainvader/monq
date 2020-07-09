@@ -11,6 +11,8 @@ use url::Url;
 use std::fs::File;
 use std::io::BufReader;
 
+pub mod entity;
+
 use env_logger::{DEFAULT_FILTER_ENV, DEFAULT_WRITE_STYLE_ENV};
 
 const INDEX_NAME: &str = "monq";
@@ -64,7 +66,10 @@ pub async fn delete_monq(client: &Elasticsearch) -> anyhow::Result<serde_json::V
     Ok(response_body)
 }
 
-pub async fn create_index(client: &Elasticsearch, index_path: &str) -> anyhow::Result<serde_json::Value> {
+pub async fn create_index(
+    client: &Elasticsearch,
+    index_path: &str,
+) -> anyhow::Result<serde_json::Value> {
     let index_file = File::open(index_path).with_context(|| "index.json could not found")?;
     let index_reader = BufReader::new(index_file);
     let index_json: serde_json::Value = serde_json::from_reader(index_reader)?;

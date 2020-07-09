@@ -1,4 +1,4 @@
-use super::entity;
+use shared::entity;
 
 pub struct DownloadQuizRequestParams {
     pub id: String,

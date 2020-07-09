@@ -6,8 +6,8 @@
 use async_trait::async_trait;
 use elasticsearch::Elasticsearch;
 
-use super::clean::entity;
 use super::clean::interface::{ESHandle, IndexResponseBody, ResponseBody};
+use shared::entity;
 
 #[derive(Clone)]
 pub struct ESHandler {
