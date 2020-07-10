@@ -2,7 +2,7 @@ use anyhow::Context;
 use clap::App;
 
 use shared::es::api::create_elasticsearch_client;
-use shared::es::api::{create_index, delete_monq};
+use shared::es::api::{create_index, delete_monq, post_doc};
 use shared::run_docker_compose;
 use shared::{get_es_url, log_info, setup_logger};
 
@@ -20,6 +20,16 @@ async fn setup() -> anyhow::Result<()> {
         .await
         .with_context(|| "failed to create monq")?;
     log_info(&format!("{}", response_body));
+    Ok(())
+}
+
+async fn seed(doc: &str) -> anyhow::Result<()> {
+    let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
+    let client = create_elasticsearch_client(url)
+        .with_context(|| "failed to create elasticsearch client")?;
+    let _ = post_doc(&client, doc)
+        .await
+        .with_context(|| "faild to post doc")?;
     Ok(())
 }
 
