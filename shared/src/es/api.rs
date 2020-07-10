@@ -49,16 +49,17 @@ pub async fn get_doc(client: &Elasticsearch, doc_id: &str) -> anyhow::Result<Res
     Ok(response)
 }
 
-pub async fn post_doc<T>(
+pub async fn post_doc(
     client: &Elasticsearch,
-    doc: &T,
+    doc: &str,
     doc_id: &str,
-) -> anyhow::Result<models::post::ResponseBody>
-where
-    T: Serialize,
-{
+) -> anyhow::Result<models::post::ResponseBody> {
     let index_parts = elasticsearch::IndexParts::IndexId(INDEX_NAME, doc_id);
-    let response = client.index(index_parts).body(doc).send().await?;
+    let response = client
+        .index(index_parts)
+        .body(serde_json::json!(doc))
+        .send()
+        .await?;
     let response_body = response.json::<models::post::ResponseBody>().await?;
     Ok(response_body)
 }
