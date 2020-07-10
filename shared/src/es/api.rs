@@ -4,7 +4,6 @@ use elasticsearch::indices::{IndicesCreateParts, IndicesDeleteParts};
 use elasticsearch::Elasticsearch;
 
 use anyhow::Context;
-use serde::Serialize;
 use url::Url;
 
 use super::super::read_json;
@@ -52,14 +51,10 @@ pub async fn get_doc(client: &Elasticsearch, doc_id: &str) -> anyhow::Result<Res
 pub async fn post_doc(
     client: &Elasticsearch,
     doc: &str,
-    doc_id: &str,
 ) -> anyhow::Result<models::post::ResponseBody> {
-    let index_parts = elasticsearch::IndexParts::IndexId(INDEX_NAME, doc_id);
-    let response = client
-        .index(index_parts)
-        .body(serde_json::json!(doc))
-        .send()
-        .await?;
+    let index_parts = elasticsearch::IndexParts::Index(INDEX_NAME);
+    let doc_json: serde_json::Value = serde_json::from_str(doc)?;
+    let response = client.index(index_parts).body(doc_json).send().await?;
     let response_body = response.json::<models::post::ResponseBody>().await?;
     Ok(response_body)
 }
