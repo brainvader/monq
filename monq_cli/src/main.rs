@@ -3,6 +3,7 @@ use clap::{App, Arg};
 
 use shared::es::api::create_elasticsearch_client;
 use shared::es::api::{create_index, delete_monq, post_doc};
+use shared::read_json;
 use shared::run_docker_compose;
 use shared::{get_es_url, log_info, setup_logger};
 
@@ -58,9 +59,17 @@ fn main() -> anyhow::Result<()> {
 
         let matches = monq_cmd.get_matches();
 
-        match matches.subcommand_name() {
-            Some("setup") => rt.block_on(setup())?,
-            None => log_info(&"No Subcommand Provided"),
+        match matches.subcommand() {
+            ("setup", _) => rt.block_on(setup())?,
+            ("seed", Some(seed_matches)) => {
+                log_info(&"Seed data");
+                if let Some(document) = seed_matches.value_of("document") {
+                    log_info(&format!("file {}", document));
+                    let doc = read_json(document).with_context(|| "failed to read seed data")?;
+                    rt.block_on(seed(&doc))?;
+                }
+            }
+            ("", None) => log_info(&"No Subcommand Provided"),
             _ => unreachable!(),
         }
     }
