@@ -1,5 +1,5 @@
 use anyhow::Context;
-use clap::App;
+use clap::{App, Arg};
 
 use shared::es::api::create_elasticsearch_client;
 use shared::es::api::{create_index, delete_monq, post_doc};
@@ -41,11 +41,20 @@ fn main() -> anyhow::Result<()> {
             tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime")?;
 
         let setup_cmd = App::new("setup").about("Setup index for monq");
+        let seed_cmd = App::new("seed").about("Seed intial data").arg(
+            Arg::with_name("document")
+                .long("doc")
+                .short("d")
+                .required(true)
+                .takes_value(true)
+                .help("specify document file"),
+        );
         let monq_cmd = App::new("monq")
             .version("0.1")
             .about("command line interface for monq")
             .author("BrainVader")
-            .subcommand(setup_cmd);
+            .subcommand(setup_cmd)
+            .subcommand(seed_cmd);
 
         let matches = monq_cmd.get_matches();
 
