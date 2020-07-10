@@ -7,9 +7,7 @@ use anyhow::Context;
 use serde::Serialize;
 use url::Url;
 
-use std::fs::File;
-use std::io::BufReader;
-
+use super::super::read_json;
 use super::models;
 
 const INDEX_NAME: &str = "monq";
@@ -31,9 +29,9 @@ pub async fn create_index(
     client: &Elasticsearch,
     index_path: &str,
 ) -> anyhow::Result<serde_json::Value> {
-    let index_file = File::open(index_path).with_context(|| "index.json could not found")?;
-    let index_reader = BufReader::new(index_file);
-    let index_json: serde_json::Value = serde_json::from_reader(index_reader)?;
+    let json_str = read_json(index_path)?;
+    let index_json: serde_json::Value =
+        serde_json::from_str(&json_str).with_context(|| "failed to parse json")?;
     let parts = IndicesCreateParts::Index(INDEX_NAME);
     let response = client
         .indices()

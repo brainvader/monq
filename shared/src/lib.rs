@@ -43,3 +43,8 @@ pub fn get_es_url() -> anyhow::Result<Url> {
     let es_addr = format!("http://{}:{}", es_host, es_port);
     Ok(Url::parse(&es_addr)?)
 }
+
+pub fn read_json<P: AsRef<std::path::Path>>(path: P) -> anyhow::Result<String> {
+    let data = std::fs::read_to_string(path).with_context(|| "failed to read json")?;
+    Ok(data)
+}
