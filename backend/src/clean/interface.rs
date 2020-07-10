@@ -1,9 +1,8 @@
 // FIXME: Leak entity from domain layer
-use super::entity;
 use super::usecases;
+use shared::entity;
 
 use async_trait::async_trait;
-use serde::{Deserialize, Serialize};
 
 #[derive(Clone)]
 pub struct Controller<InputPort>
@@ -39,51 +38,6 @@ impl usecases::QuizOutputPort for QuizPresenter {
     fn post_quiz(&self, quiz: entity::Quiz) -> usecases::QuizPosted {
         usecases::QuizPosted { source: quiz }
     }
-}
-
-#[derive(Deserialize, Debug)]
-pub struct ResponseBody<T> {
-    #[serde(alias = "_index")]
-    index: String,
-    #[serde(alias = "_type")]
-    r#type: String,
-    #[serde(alias = "_id")]
-    id: String,
-    #[serde(alias = "_version")]
-    version: i64,
-    #[serde(alias = "_seq_no")]
-    seq_no: i64,
-    #[serde(alias = "_primary_term")]
-    primary_term: i64,
-    found: bool,
-    #[serde(alias = "_source")]
-    pub source: T,
-}
-
-#[derive(Deserialize)]
-struct Shard {
-    failed: i64,
-    successful: i64,
-    total: i64,
-}
-
-#[derive(Deserialize)]
-pub struct IndexResponseBody {
-    #[serde(alias = "_index")]
-    index: String,
-    #[serde(alias = "_type")]
-    r#type: String,
-    #[serde(alias = "_id")]
-    id: String,
-    #[serde(alias = "_version")]
-    version: i64,
-    result: String,
-    #[serde(alias = "_shards")]
-    shards: Shard,
-    #[serde(alias = "_seq_no")]
-    seq_no: i64,
-    #[serde(alias = "_primary_term")]
-    primary_term: i64,
 }
 
 #[async_trait]

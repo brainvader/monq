@@ -9,7 +9,8 @@ use backend_lib::db::ESHandler;
 use backend_lib::endpoints::{hello_monq, index, monq_endpoints, page_not_found};
 use backend_lib::util::get_server_address;
 
-use shared::{create_elasticsearch_client, get_es_url, setup_logger};
+use shared::es::api::create_elasticsearch_client;
+use shared::{get_es_url, setup_logger};
 
 #[actix_rt::main]
 async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {

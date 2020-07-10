@@ -1,10 +1,11 @@
 use anyhow::Context;
-use clap::App;
+use clap::{App, Arg};
 
+use shared::es::api::create_elasticsearch_client;
+use shared::es::api::{create_index, delete_monq, post_doc};
+use shared::read_json;
 use shared::run_docker_compose;
-use shared::{create_elasticsearch_client, get_es_url};
-use shared::{create_index, delete_monq};
-use shared::{log_info, setup_logger};
+use shared::{get_es_url, log_info, setup_logger};
 
 async fn setup() -> anyhow::Result<()> {
     let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
@@ -23,6 +24,16 @@ async fn setup() -> anyhow::Result<()> {
     Ok(())
 }
 
+async fn seed(doc: &str) -> anyhow::Result<()> {
+    let url = get_es_url().with_context(|| "failed to get elasticsearch url")?;
+    let client = create_elasticsearch_client(url)
+        .with_context(|| "failed to create elasticsearch client")?;
+    let _ = post_doc(&client, doc)
+        .await
+        .with_context(|| "faild to post doc")?;
+    Ok(())
+}
+
 fn main() -> anyhow::Result<()> {
     setup_logger().with_context(|| "failed to setup logger")?;
     let status = run_docker_compose()?;
@@ -31,17 +42,34 @@ fn main() -> anyhow::Result<()> {
             tokio::runtime::Runtime::new().with_context(|| "failed to create tokio runtime")?;
 
         let setup_cmd = App::new("setup").about("Setup index for monq");
+        let seed_cmd = App::new("seed").about("Seed intial data").arg(
+            Arg::with_name("document")
+                .long("doc")
+                .short("d")
+                .required(true)
+                .takes_value(true)
+                .help("specify document file"),
+        );
         let monq_cmd = App::new("monq")
             .version("0.1")
             .about("command line interface for monq")
             .author("BrainVader")
-            .subcommand(setup_cmd);
+            .subcommand(setup_cmd)
+            .subcommand(seed_cmd);
 
         let matches = monq_cmd.get_matches();
 
-        match matches.subcommand_name() {
-            Some("setup") => rt.block_on(setup())?,
-            None => log_info(&"No Subcommand Provided"),
+        match matches.subcommand() {
+            ("setup", _) => rt.block_on(setup())?,
+            ("seed", Some(seed_matches)) => {
+                log_info(&"Seed data");
+                if let Some(document) = seed_matches.value_of("document") {
+                    log_info(&format!("file {}", document));
+                    let doc = read_json(document).with_context(|| "failed to read seed data")?;
+                    rt.block_on(seed(&doc))?;
+                }
+            }
+            ("", None) => log_info(&"No Subcommand Provided"),
             _ => unreachable!(),
         }
     }

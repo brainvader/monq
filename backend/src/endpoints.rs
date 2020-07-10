@@ -3,8 +3,8 @@ use elasticsearch::http::response::Response;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
 
-use super::clean::entity::{Cell, Quiz, QuizTitle};
 use super::context::QuizController;
+use shared::entity::{Cell, Quiz, QuizTitle};
 
 use shared::log_info;
 
