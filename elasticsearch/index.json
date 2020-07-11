@@ -1,6 +1,9 @@
 {
     "mappings": {
         "properties": {
+            "id": {
+                "type": "text"
+            },
             "title": {
                 "properties": {
                     "cell_type": {
