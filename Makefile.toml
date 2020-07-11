@@ -38,17 +38,6 @@ args = [
     "-I", "localhost:9200/monq?pretty"
 ]
 
-[tasks.create-pipline]
-description = "Define pipeline"
-workspace = false
-cwd = "./docker/elasticsearch"
-command = "curl"
-args = [
-    "-X", "PUT", "localhost:9200/_ingest/pipeline/remove_pipeline_id?pretty",
-    "-H", "Content-Type: application/json", 
-    "-d", "@pipeline.json"
-]
-
 [tasks.create-index]
 description = "Create index"
 dependencies = ["docker-compose-up"]
@@ -77,7 +66,7 @@ dependencies = ["docker-compose-up"]
 workspace = false
 command = "curl"
 args = [
-    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/0?pipeline=remove_pipeline_id&pretty=true",
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/0?pretty=true",
     "-H", "Content-Type: application/json",
     "-d", "@db/what-is-monq.json"
 ]
@@ -87,7 +76,7 @@ description = "Put document to index monq"
 workspace = false
 command = "curl"
 args = [
-    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pipeline=remove_pipeline_id&pretty=true",
+    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pretty=true",
     "-H", "Content-Type: application/json",
     "-d", "@${@}"
 ]
@@ -97,7 +86,6 @@ description = "Set up index"
 workspace = false
 script = [
     "cargo make delete-index",
-    "cargo make create-pipline",
     "cargo make create-index",
     "cargo make db-seed"
 ]
