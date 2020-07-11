@@ -27,6 +27,16 @@ args = [
     "--bin", "monq", "setup"
 ]
 
+[tasks.monq-seed]
+description = "Seed data"
+workspace = false
+command = "cargo"
+args = [
+    "run",
+    "--bin", "monq", "seed",
+    "--doc", "db/what-is-monq.json"
+]
+
 [tasks.check-index]
 description = "Make sure the existence of index"
 condtion = { env_set = ["ES_HOST", "ES_PORT"] }
