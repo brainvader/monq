@@ -18,14 +18,31 @@ args = [
     "up", "-d"
 ]
 
-# TODO: Need rust commnad line tool to setup index
-[tasks.setup-monq]
+[tasks.monq-setup]
 description = "Setup monq index"
 workspace = false
 command = "cargo"
 args = [
     "run",
     "--bin", "monq", "setup"
+]
+
+[tasks.monq-seed]
+description = "Seed data"
+workspace = false
+command = "cargo"
+args = [
+    "run",
+    "--bin", "monq", "seed",
+    "--doc", "db/what-is-monq.json"
+]
+
+[tasks.setup-flow]
+description = "Set up index"
+workspace = false
+script = [
+    "cargo make monq-setup",
+    "cargo make monq-seed"
 ]
 
 [tasks.check-index]
@@ -60,17 +77,6 @@ args = [
     "-X", "DELETE", "${ES_HOST}:${ES_PORT}/monq?pretty",
 ]
 
-[tasks.db-seed]
-description = "Seed database"
-dependencies = ["docker-compose-up"]
-workspace = false
-command = "curl"
-args = [
-    "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/0?pretty=true",
-    "-H", "Content-Type: application/json",
-    "-d", "@db/what-is-monq.json"
-]
-
 [tasks.put-doc]
 description = "Put document to index monq"
 workspace = false
@@ -79,15 +85,6 @@ args = [
     "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pretty=true",
     "-H", "Content-Type: application/json",
     "-d", "@${@}"
-]
-
-[tasks.index-flow]
-description = "Set up index"
-workspace = false
-script = [
-    "cargo make delete-index",
-    "cargo make create-index",
-    "cargo make db-seed"
 ]
 
 [tasks.search]
