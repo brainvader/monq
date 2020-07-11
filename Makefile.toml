@@ -18,8 +18,7 @@ args = [
     "up", "-d"
 ]
 
-# TODO: Need rust commnad line tool to setup index
-[tasks.setup-monq]
+[tasks.monq-setup]
 description = "Setup monq index"
 workspace = false
 command = "cargo"
