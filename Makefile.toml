@@ -37,6 +37,14 @@ args = [
     "--doc", "db/what-is-monq.json"
 ]
 
+[tasks.setup-flow]
+description = "Set up index"
+workspace = false
+script = [
+    "cargo make monq-setup",
+    "cargo make monq-seed"
+]
+
 [tasks.check-index]
 description = "Make sure the existence of index"
 condtion = { env_set = ["ES_HOST", "ES_PORT"] }
@@ -77,15 +85,6 @@ args = [
     "-X", "PUT", "${ES_HOST}:${ES_PORT}/monq/_doc/1?pretty=true",
     "-H", "Content-Type: application/json",
     "-d", "@${@}"
-]
-
-[tasks.index-flow]
-description = "Set up index"
-workspace = false
-script = [
-    "cargo make delete-index",
-    "cargo make create-index",
-    "cargo make db-seed"
 ]
 
 [tasks.search]
