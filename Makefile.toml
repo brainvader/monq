@@ -96,6 +96,16 @@ args = [
     "-d", "@${@}"
 ]
 
+[tasks.all-docs]
+description = "Get all document"
+workspace = false
+command = "curl"
+args = [
+    "-XGET", "localhost:9200/_search?pretty&size=0",
+    "-H", "Content-Type: application/json",
+    "-d", "@fixture/search/all-docs.json"
+]
+
 [tasks.test-sudachi]
 description = "Test sudachi analyzer"
 dependencies = ["docker-compose-up"]
