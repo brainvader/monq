@@ -101,7 +101,7 @@ description = "Get all document"
 workspace = false
 command = "curl"
 args = [
-    "-XGET", "localhost:9200/_search?pretty&size=0",
+    "-XGET", "localhost:9200/_search?pretty",
     "-H", "Content-Type: application/json",
     "-d", "@fixture/search/all-docs.json"
 ]
