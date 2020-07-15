@@ -87,6 +87,7 @@ args = [
     "-d", "@${@}"
 ]
 
+# Query DSL
 [tasks.search]
 workspace = false
 command = "curl"
