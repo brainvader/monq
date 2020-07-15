@@ -87,6 +87,7 @@ args = [
     "-d", "@${@}"
 ]
 
+# Query DSL
 [tasks.search]
 workspace = false
 command = "curl"
@@ -94,6 +95,16 @@ args = [
     "-X", "GET", "localhost:9200/_search?pretty",
     "-H", "Content-Type: application/json",
     "-d", "@${@}"
+]
+
+[tasks.all-docs]
+description = "Get all document"
+workspace = false
+command = "curl"
+args = [
+    "-XGET", "localhost:9200/_search?pretty",
+    "-H", "Content-Type: application/json",
+    "-d", "@fixture/search/all-docs.json"
 ]
 
 [tasks.test-sudachi]
