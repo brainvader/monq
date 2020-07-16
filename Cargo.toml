@@ -1,7 +1,7 @@
 [workspace]
 members = [
     "monq_cli",
+    "monq_dashboard",
     "backend",
     "frontend",
-    "shared"
 ]
