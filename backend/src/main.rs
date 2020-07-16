@@ -1,3 +1,4 @@
+use actix_files::Files;
 use actix_web::{web, HttpServer};
 use anyhow::Context;
 use elasticsearch::Elasticsearch;
@@ -32,6 +33,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .service(index)
             .service(hello_monq)
             .service(dashboard)
+            .service(Files::new("/pkg", "./monq_dashboard/pkg"))
             .service(web::scope("/api").configure(monq_endpoints))
             .default_service(web::route().to(page_not_found))
     };
