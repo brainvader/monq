@@ -1164,7 +1164,6 @@ name = "monq_dashboard"
 version = "0.1.0"
 dependencies = [
  "seed 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)",
- "shared 0.1.0",
 ]
 
 [[package]]
