@@ -6,7 +6,7 @@ use listenfd::ListenFd;
 use backend_lib::api;
 use backend_lib::clean::{interface, usecases};
 use backend_lib::db::ESHandler;
-use backend_lib::endpoints::{hello_monq, index, monq_endpoints, page_not_found};
+use backend_lib::endpoints::{dashboard, hello_monq, index, monq_endpoints, page_not_found};
 use backend_lib::util::get_server_address;
 
 use shared::es::api::create_elasticsearch_client;
@@ -31,6 +31,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .wrap(actix_web::middleware::Logger::default())
             .service(index)
             .service(hello_monq)
+            .service(dashboard)
             .service(web::scope("/api").configure(monq_endpoints))
             .default_service(web::route().to(page_not_found))
     };
