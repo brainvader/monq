@@ -13,6 +13,7 @@ path = "src/lib.rs"
 [dependencies]
 actix-web = "2.0.0"
 actix-rt = "1.1.1"
+actix-files = "0.2.2"
 listenfd = "0.3.3" 
 serde = "1.0.110"
 serde_json = "1.0.53"
