@@ -123,7 +123,7 @@ description = "Run serve in development mode"
 # only run if PORT  is set, otherwise skipped
 condition = { env_set = [ "PORT" ] }
 # run in specified directory
-cwd = "./backend"
+# cwd = "./backend"
 workspace = false
 dependencies = ["docker-compose-up", "install-cargo-watch"]
 install_crate = "systemfd"
@@ -131,7 +131,8 @@ command = "systemfd"
 args = [
     "--no-pid",
     "-s", "http::${PORT}",
-    "--", "cargo", "watch", "-x", "run"
+    "--",
+    "cargo", "watch", "-x", "run --bin backend"
 ]
 
 [tasks.dashboard_dev]

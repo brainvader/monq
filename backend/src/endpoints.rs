@@ -1,4 +1,5 @@
-use actix_web::{get, http, post, web, HttpRequest, HttpResponse};
+use actix_files::NamedFile;
+use actix_web::{get, http, post, web, HttpRequest, HttpResponse, Result};
 use elasticsearch::http::response::Response;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
@@ -22,6 +23,12 @@ pub async fn hello_monq() -> impl actix_web::Responder {
     builder
         .content_type(mime_type.to_string())
         .body("Hello MonQ!")
+}
+
+#[get("/dashboard")]
+pub async fn dashboard() -> Result<NamedFile> {
+    let named_file = NamedFile::open("./monq_dashboard/index.html")?;
+    Ok(named_file)
 }
 
 pub async fn page_not_found() -> impl actix_web::Responder {
