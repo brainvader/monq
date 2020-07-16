@@ -66,6 +66,6 @@ fn main() -> anyhow::Result<()> {
     //     .with_context(|| "Failed to create index")?;
     // log::info!("{}", response);
 
-    // start_server(client).with_context(|| "Failed to start server")?;
+    start_server(client).with_context(|| "Failed to start server")?;
     Ok(())
 }
