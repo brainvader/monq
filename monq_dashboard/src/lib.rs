@@ -17,11 +17,7 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
 }
 
 fn view(model: &Model) -> Node<Msg> {
-    div![
-        C!["counter"],
-        "This is a counter: ",
-        button![model, ev(Ev::Click, |_| Msg::Increment),],
-    ]
+    div![C!["counter"], r#"$$ \frac{a}{b} $$"#,]
 }
 
 #[wasm_bindgen(start)]
