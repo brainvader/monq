@@ -34,6 +34,7 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .service(hello_monq)
             .service(dashboard)
             .service(Files::new("/pkg", "./monq_dashboard/pkg"))
+            .service(Files::new("/public", "./monq_dashboard/public"))
             .service(web::scope("/api").configure(monq_endpoints))
             .default_service(web::route().to(page_not_found))
     };
