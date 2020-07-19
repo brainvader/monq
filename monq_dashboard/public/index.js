@@ -3,4 +3,7 @@ import renderMathInElement from "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/
 
 init('/pkg/package_bg.wasm').then(() => {
     renderMathInElement(document.body);
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+    });
 });

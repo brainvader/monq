@@ -16,8 +16,31 @@ fn update(msg: Msg, model: &mut Model, _: &mut impl Orders<Msg>) {
     }
 }
 
-fn view(model: &Model) -> Node<Msg> {
-    div![C!["counter"], r#"$$ \frac{a}{b} $$"#,]
+fn view(_: &Model) -> Node<Msg> {
+    div![
+        div!["こんな感じで数式表示"],
+        div![C!["math"], r#"$$ \frac{a}{b} $$"#],
+        div!["コードもハイライト可能です."],
+        pre![code![
+            C!["rust"],
+            r#"#[derive(Debug)]
+    pub enum State {
+        Start,
+        Transient,
+        Closed,
+    }
+    
+    impl From<&'a str> for State {
+        fn from(s: &'a str) -> Self {
+            match s {
+                "start" => State::Start,
+                "closed" => State::Closed,
+                _ => unreachable!(),
+            }
+        }
+    }"#
+        ]]
+    ]
 }
 
 #[wasm_bindgen(start)]
