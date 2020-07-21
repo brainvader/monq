@@ -168,3 +168,9 @@ command = "rm"
 args = [
     "-r", "./dist"
 ]
+
+[tasks.build_tailwind]
+workspace = false
+run_task = [
+    { name = [ "gen_tailwind_rs", "cleanup_tailwind" ]}
+]
