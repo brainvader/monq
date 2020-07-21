@@ -158,3 +158,13 @@ args = [
     "--config webpack.config", 
     "--mode=development"
 ]
+
+[tasks.cleanup_tailwind]
+description = "Cleanup dist"
+workspace = false
+private = true
+cwd = "./monq_dashboard/tailwind"
+command = "rm"
+args = [
+    "-r", "./dist"
+]
