@@ -146,3 +146,15 @@ args = [
     "--out-name", "package",
     "--dev"]
 watch = true
+
+# postcss-typed-css-classes 
+[tasks.gen_tailwind_rs]
+description = "Generate a const file for tailwind classes"
+workspace = false
+cwd = "./monq_dashboard/tailwind"
+command = "npx"
+args = [
+    "webpack",
+    "--config webpack.config", 
+    "--mode=development"
+]
