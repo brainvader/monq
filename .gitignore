@@ -1,2 +1,5 @@
 **/target
 **/pkg
+**/node_modules
+
+tailwind_classes.rs

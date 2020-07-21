@@ -146,3 +146,31 @@ args = [
     "--out-name", "package",
     "--dev"]
 watch = true
+
+# postcss-typed-css-classes 
+[tasks.gen_tailwind_rs]
+description = "Generate a const file for tailwind classes"
+workspace = false
+cwd = "./monq_dashboard/tailwind"
+command = "npx"
+args = [
+    "webpack",
+    "--config webpack.config", 
+    "--mode=development"
+]
+
+[tasks.cleanup_tailwind]
+description = "Cleanup dist"
+workspace = false
+private = true
+cwd = "./monq_dashboard/tailwind"
+command = "rm"
+args = [
+    "-r", "./dist"
+]
+
+[tasks.build_tailwind]
+workspace = false
+run_task = [
+    { name = [ "gen_tailwind_rs", "cleanup_tailwind" ]}
+]
