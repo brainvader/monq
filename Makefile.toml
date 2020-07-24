@@ -172,5 +172,8 @@ args = [
 [tasks.build_tailwind]
 workspace = false
 run_task = [
-    { name = [ "gen_tailwind_rs", "cleanup_tailwind" ]}
+    { name = [
+        "gen_tailwind_rs",
+        # "cleanup_tailwind"
+    ]}
 ]

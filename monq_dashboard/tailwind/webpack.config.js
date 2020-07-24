@@ -3,6 +3,8 @@ const path = require("path");
 
 const WebpackBar = require("webpackbar");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 // Webpack generates `css_classes.rs` with this config.
 // This config is used in command `yarn generate:css_classes`.
@@ -10,22 +12,44 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 
 module.exports = (env, argv) => {
     return {
-        entry: path.resolve(__dirname, "./index.tailwind.ts"),
-        // output: {
-        //     path: path.resolve(__dirname, "./dist"),
-        //     filename: "css_classes.js"
-        // },
+        entry: path.resolve(__dirname, "./index.js"),
+        output: {
+            path: path.resolve(__dirname, "../dist"),
+            filename: "index.js"
+        },
         mode: argv.mode,
         plugins: [
             new WebpackBar(),
-            new CleanWebpackPlugin({ cleanAfterEveryBuildPatterns: ["main.js", "dist"] })
+            new CleanWebpackPlugin({ cleanAfterEveryBuildPatterns: ["index.js", "dist"] }),
+            new HtmlWebpackPlugin({ template: path.resolve(__dirname, "../index.html") }),
+            new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })
         ],
         module: {
             rules: [
                 {
+                    test: /\.js$/,
+                    exclude: /node_modules/,
+                    use: [
+                        {
+                            loader: 'babel-loader',
+                            options: {
+                                presets: [
+                                    ['@babel/preset-env',
+                                        {
+                                            useBuiltIns: 'entry',
+                                            corejs: 3
+                                        }
+                                    ]
+                                ],
+                                plugins: ["@babel/plugin-syntax-import-meta"]
+                            }
+                        },
+                    ]
+                },
+                {
                     test: /\.css$/,
                     use: [
-                        "style-loader",
+                        MiniCssExtractPlugin.loader,
                         "css-loader",
                         {
                             loader: "postcss-loader",
