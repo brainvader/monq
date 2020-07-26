@@ -22,7 +22,7 @@ module.exports = (env, argv) => {
             new WebpackBar(),
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({ template: path.resolve(__dirname, "../index.html") }),
-            new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })
+            new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
         ],
         module: {
             rules: [
