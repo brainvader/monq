@@ -146,7 +146,6 @@ args = [
     "--dev"]
 watch = true
 
-# postcss-typed-css-classes 
 [tasks.build_dashboard]
 description = "Generate a const file for tailwind classes"
 workspace = false
