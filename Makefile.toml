@@ -147,7 +147,7 @@ args = [
 watch = true
 
 [tasks.build_dashboard]
-description = "Generate a const file for tailwind classes"
+description = "Build dashboard"
 workspace = false
 cwd = "./monq_dashboard/tailwind"
 watch = true
