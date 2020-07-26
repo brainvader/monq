@@ -20,7 +20,7 @@ module.exports = (env, argv) => {
         mode: argv.mode,
         plugins: [
             new WebpackBar(),
-            new CleanWebpackPlugin({ cleanAfterEveryBuildPatterns: ["index.js", "dist"] }),
+            new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({ template: path.resolve(__dirname, "../index.html") }),
             new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })
         ],
