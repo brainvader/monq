@@ -147,7 +147,7 @@ args = [
 watch = true
 
 # postcss-typed-css-classes 
-[tasks.gen_tailwind_rs]
+[tasks.build_dashboard]
 description = "Generate a const file for tailwind classes"
 workspace = false
 cwd = "./monq_dashboard/tailwind"
