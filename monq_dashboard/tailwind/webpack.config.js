@@ -27,24 +27,13 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.ts$/,
                     exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: 'babel-loader',
-                            options: {
-                                presets: [
-                                    ['@babel/preset-env',
-                                        {
-                                            useBuiltIns: 'entry',
-                                            corejs: 3
-                                        }
-                                    ]
-                                ],
-                                plugins: ["@babel/plugin-syntax-import-meta"]
-                            }
-                        },
-                    ]
+                    loader: "ts-loader",
+                    options: {
+                        transpileOnly: true,
+                        configFile: "tsconfig.json",
+                    }
                 },
                 {
                     test: /\.css$/,
