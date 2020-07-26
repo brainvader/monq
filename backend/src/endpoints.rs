@@ -27,7 +27,7 @@ pub async fn hello_monq() -> impl actix_web::Responder {
 
 #[get("/dashboard")]
 pub async fn dashboard() -> Result<NamedFile> {
-    let named_file = NamedFile::open("./monq_dashboard/index.html")?;
+    let named_file = NamedFile::open("./monq_dashboard/dist/index.html")?;
     Ok(named_file)
 }
 
