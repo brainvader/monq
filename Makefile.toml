@@ -158,15 +158,14 @@ args = [
     "--mode=development"
 ]
 
-[tasks.cleanup_tailwind]
-description = "Cleanup dist"
-workspace = false
-private = true
-cwd = "./monq_dashboard/tailwind"
-command = "rm"
-args = [
-    "-r", "./dist"
-]
+# [tasks.build_tailwind]
+# workspace = false
+# run_task = [
+#     { name = [
+#         "gen_tailwind_rs",
+#         # "cleanup_tailwind"
+#     ]}
+# ]
 
 [tasks.build_tailwind]
 workspace = false
