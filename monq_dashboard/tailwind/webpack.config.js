@@ -5,6 +5,7 @@ const WebpackBar = require("webpackbar");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 // Webpack generates `css_classes.rs` with this config.
 // This config is used in command `yarn generate:css_classes`.
@@ -23,6 +24,11 @@ module.exports = (env, argv) => {
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({ template: path.resolve(__dirname, "../index.html") }),
             new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+            new WasmPackPlugin({
+                crateDirectory: path.resolve(__dirname, '../'),
+                outDir: path.resolve(__dirname, '../pkg'),
+                outName: 'package',
+            })
         ],
         module: {
             rules: [
