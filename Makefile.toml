@@ -151,6 +151,7 @@ watch = true
 description = "Generate a const file for tailwind classes"
 workspace = false
 cwd = "./monq_dashboard/tailwind"
+watch = true
 command = "npx"
 args = [
     "webpack",
