@@ -157,21 +157,3 @@ args = [
     "--config webpack.config", 
     "--mode=development"
 ]
-
-# [tasks.build_tailwind]
-# workspace = false
-# run_task = [
-#     { name = [
-#         "gen_tailwind_rs",
-#         # "cleanup_tailwind"
-#     ]}
-# ]
-
-[tasks.build_tailwind]
-workspace = false
-run_task = [
-    { name = [
-        "gen_tailwind_rs",
-        # "cleanup_tailwind"
-    ]}
-]
