@@ -5,6 +5,7 @@ const WebpackBar = require("webpackbar");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WasmPackPlugin = require("@wasm-tool/wasm-pack-plugin");
 
 // Webpack generates `css_classes.rs` with this config.
 // This config is used in command `yarn generate:css_classes`.
@@ -12,39 +13,34 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = (env, argv) => {
     return {
-        entry: path.resolve(__dirname, "./index.js"),
+        entry: path.resolve(__dirname, "./index.ts"),
         output: {
+            publicPath: '/',
             path: path.resolve(__dirname, "../dist"),
             filename: "index.js"
         },
         mode: argv.mode,
         plugins: [
             new WebpackBar(),
-            new CleanWebpackPlugin({ cleanAfterEveryBuildPatterns: ["index.js", "dist"] }),
+            new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({ template: path.resolve(__dirname, "../index.html") }),
-            new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' })
+            new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+            new WasmPackPlugin({
+                crateDirectory: path.resolve(__dirname, '../'),
+                outDir: path.resolve(__dirname, '../pkg'),
+                outName: 'package',
+            })
         ],
         module: {
             rules: [
                 {
-                    test: /\.js$/,
+                    test: /\.ts$/,
                     exclude: /node_modules/,
-                    use: [
-                        {
-                            loader: 'babel-loader',
-                            options: {
-                                presets: [
-                                    ['@babel/preset-env',
-                                        {
-                                            useBuiltIns: 'entry',
-                                            corejs: 3
-                                        }
-                                    ]
-                                ],
-                                plugins: ["@babel/plugin-syntax-import-meta"]
-                            }
-                        },
-                    ]
+                    loader: "ts-loader",
+                    options: {
+                        transpileOnly: true,
+                        configFile: "tsconfig.json",
+                    }
                 },
                 {
                     test: /\.css$/,

@@ -1,12 +1,13 @@
-// import "./styles.css";
+import "./styles.css";
+import renderMathInElement from "katex/dist/contrib/auto-render";
+import { highlightBlock } from 'highlight.js';
 
-// import init from '../pkg/package.js';
-// import renderMathInElement from "katex/dist/contrib/auto-render";
-// import { highlightBlock } from 'highlight.js';
+(async () => {
+    // Note: files in `./pkg/` will be created on the first build.
+    await import("../pkg/package");
 
-// init('../pkg/package_bg.wasm').then(() => {
-//     renderMathInElement(document.body);
-//     document.querySelectorAll('pre code').forEach((block) => {
-//         highlightBlock(block);
-//     });
-// });
+    renderMathInElement(document.body);
+    document.querySelectorAll('pre code').forEach((block) => {
+        highlightBlock(block);
+    });
+})();
