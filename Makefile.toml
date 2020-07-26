@@ -135,44 +135,14 @@ args = [
     "cargo", "watch", "-x", "run --bin backend"
 ]
 
-[tasks.dashboard_dev]
-description = "build and serve dashboard in dev mode"
-workspace = false
-install_crate = { crate_name = "wasm-pack", binary = "wasm-pack", test_arg = "-V" }
-command = "wasm-pack"
-args = [
-    "build", "monq_dashboard",
-    "--out-name", "package",
-    "--dev"]
-watch = true
-
-# postcss-typed-css-classes 
-[tasks.gen_tailwind_rs]
-description = "Generate a const file for tailwind classes"
+[tasks.build_dashboard]
+description = "Build dashboard"
 workspace = false
 cwd = "./monq_dashboard/tailwind"
+watch = true
 command = "npx"
 args = [
     "webpack",
     "--config webpack.config", 
     "--mode=development"
-]
-
-[tasks.cleanup_tailwind]
-description = "Cleanup dist"
-workspace = false
-private = true
-cwd = "./monq_dashboard/tailwind"
-command = "rm"
-args = [
-    "-r", "./dist"
-]
-
-[tasks.build_tailwind]
-workspace = false
-run_task = [
-    { name = [
-        "gen_tailwind_rs",
-        # "cleanup_tailwind"
-    ]}
 ]
