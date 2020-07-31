@@ -3,6 +3,7 @@ use actix_web::{get, http, post, web, HttpRequest, HttpResponse, Result};
 use elasticsearch::http::response::Response;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
+use serde::{Deserialize, Serialize};
 
 use super::context::QuizController;
 use shared::entity::{Cell, Quiz, QuizTitle};
@@ -101,6 +102,24 @@ pub async fn post_quiz(quiz: web::Json<Quiz>) -> impl actix_web::Responder {
         .json(quiz.into_inner())
 }
 
+#[derive(Serialize, Deserialize)]
+struct Author {
+    name: String,
+    age: i32,
+}
+
+#[get("/author")]
+pub async fn get_author() -> impl actix_web::Responder {
+    let author = Author {
+        name: "BrainVader".to_owned(),
+        age: 35,
+    };
+    let mut builder = HttpResponse::Ok();
+    let mime_type = http::header::ContentType::json();
+    builder.content_type(mime_type.to_string()).json(author)
+}
+
 pub fn monq_endpoints(config: &mut web::ServiceConfig) {
     config.service(cat).service(get_quiz).service(post_quiz);
+        .service(get_author)
 }
