@@ -32,10 +32,10 @@ async fn start_server(client: Elasticsearch) -> anyhow::Result<()> {
             .wrap(actix_web::middleware::Logger::default())
             .service(index)
             .service(hello_monq)
+            .service(web::scope("/api").configure(monq_endpoints))
             .service(dashboard)
             .service(Files::new("/pkg", "./monq_dashboard/pkg"))
             .service(Files::new("/", "./monq_dashboard/dist"))
-            .service(web::scope("/api").configure(monq_endpoints))
             .default_service(web::route().to(page_not_found))
     };
 
