@@ -1,5 +1,8 @@
 use seed::{prelude::*, *};
 
+mod generated;
+use generated::tailwind_classes;
+
 fn init(_: Url, _: &mut impl Orders<Msg>) -> Model {
     Model::default()
 }
