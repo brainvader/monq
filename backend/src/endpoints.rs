@@ -119,7 +119,37 @@ pub async fn get_author() -> impl actix_web::Responder {
     builder.content_type(mime_type.to_string()).json(author)
 }
 
+#[get("/tutorial")]
+pub async fn get_tutorial() -> impl actix_web::Responder {
+    let source = r#"{
+        "id": "0",
+        "title": { "type": "text", "content": "What is MonQ?" },
+        "question": [
+            { "type": "text", "content": "What is MonQ?" }
+        ],
+        "answer": [
+            { "type": "text", "content": "MonQ is ..." },
+            { "type": "math", "content": "$$ \frac{a}{b} $$" },
+            { "type": "rust", "content": "pub enum State {
+                Start,
+                Transient,
+                Closed
+            }" }
+        ]
+    }"#;
+
+    // let tutorial = serde_json::from_str::<Quiz>(source).expect("failed to deserialize Quiz");
+    let tutorial = serde_json::json!(source);
+    let mut builder = HttpResponse::Ok();
+    let mime_type = http::header::ContentType::json();
+    builder.content_type(mime_type.to_string()).json(tutorial)
+}
+
 pub fn monq_endpoints(config: &mut web::ServiceConfig) {
-    config.service(cat).service(get_quiz).service(post_quiz);
+    config
+        .service(cat)
+        .service(get_quiz)
+        .service(post_quiz)
         .service(get_author)
+        .service(get_tutorial);
 }
