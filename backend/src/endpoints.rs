@@ -6,7 +6,7 @@ use futures::future::TryFutureExt;
 use serde::{Deserialize, Serialize};
 
 use super::context::QuizController;
-use shared::entity::{Cell, Quiz, QuizTitle};
+use shared::entity::{Cell, Quiz};
 
 use shared::log_info;
 
@@ -79,7 +79,7 @@ pub async fn get_quiz(req: HttpRequest, id: web::Path<String>) -> impl actix_web
     }];
     let quiz = Quiz {
         id: id.to_owned(),
-        title: QuizTitle {
+        title: Cell {
             r#type: "text".to_owned(),
             content: "MonQ Overview".to_owned(),
         },
