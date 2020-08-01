@@ -1,16 +1,13 @@
 use serde::{Deserialize, Serialize};
 
 pub type QuizID = String;
-pub type QuizTitle = Cell;
-pub type QuizQuestion = Vec<Cell>;
-pub type QuizAnswer = Vec<Cell>;
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct Quiz {
     pub id: QuizID,
-    pub title: QuizTitle,
-    pub question: QuizQuestion,
-    pub answer: QuizAnswer,
+    pub title: Cell,
+    pub question: Vec<Cell>,
+    pub answer: Vec<Cell>,
 }
 
 #[derive(Deserialize, Serialize, Clone)]

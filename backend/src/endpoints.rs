@@ -3,9 +3,10 @@ use actix_web::{get, http, post, web, HttpRequest, HttpResponse, Result};
 use elasticsearch::http::response::Response;
 use elasticsearch::Error as ES_Error;
 use futures::future::TryFutureExt;
+use serde::{Deserialize, Serialize};
 
 use super::context::QuizController;
-use shared::entity::{Cell, Quiz, QuizTitle};
+use shared::entity::{Cell, Quiz};
 
 use shared::log_info;
 
@@ -78,7 +79,7 @@ pub async fn get_quiz(req: HttpRequest, id: web::Path<String>) -> impl actix_web
     }];
     let quiz = Quiz {
         id: id.to_owned(),
-        title: QuizTitle {
+        title: Cell {
             r#type: "text".to_owned(),
             content: "MonQ Overview".to_owned(),
         },
@@ -101,6 +102,54 @@ pub async fn post_quiz(quiz: web::Json<Quiz>) -> impl actix_web::Responder {
         .json(quiz.into_inner())
 }
 
+#[derive(Serialize, Deserialize)]
+struct Author {
+    name: String,
+    age: i32,
+}
+
+#[get("/author")]
+pub async fn get_author() -> impl actix_web::Responder {
+    let author = Author {
+        name: "BrainVader".to_owned(),
+        age: 35,
+    };
+    let mut builder = HttpResponse::Ok();
+    let mime_type = http::header::ContentType::json();
+    builder.content_type(mime_type.to_string()).json(author)
+}
+
+#[get("/tutorial")]
+pub async fn get_tutorial() -> impl actix_web::Responder {
+    let source = r#"{
+        "id": "0",
+        "title": { "type": "text", "content": "What is MonQ?" },
+        "question": [
+            { "type": "text", "content": "What is MonQ?" }
+        ],
+        "answer": [
+            { "type": "text", "content": "MonQ is ..." },
+            { "type": "math", "content": "$$ \frac{a}{b} $$" },
+            { "type": "rust", "content": "pub enum State {
+                Start,
+                Transient,
+                Closed
+            }" }
+        ]
+    }"#;
+
+    // let tutorial = serde_json::from_str::<Quiz>(source).expect("failed to deserialize Quiz");
+    let tutorial = serde_json::json!(source);
+    let mut builder = HttpResponse::Ok();
+    let mime_type = http::header::ContentType::json();
+    builder.content_type(mime_type.to_string()).json(tutorial)
+}
+
 pub fn monq_endpoints(config: &mut web::ServiceConfig) {
-    config.service(cat).service(get_quiz).service(post_quiz);
+    config
+        .service(cat)
+        .service(get_quiz)
+        .service(post_quiz)
+        .service(get_author)
+        .service(get_tutorial);
 }
