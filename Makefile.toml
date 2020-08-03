@@ -155,3 +155,12 @@ command = "npm"
 args = [
     "run", "dev"
 ]
+
+[tasks.build-editor]
+description = "Build monq editor"
+workspace = false
+cwd = "./monq-editor"
+command = "npm"
+args = [
+    "run", "build"
+]
