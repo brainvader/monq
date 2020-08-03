@@ -146,3 +146,30 @@ args = [
     "--config webpack.config", 
     "--mode=development"
 ]
+
+[tasks.editor_dev]
+description = "Start monq editor in development mode"
+workspace = false
+cwd = "./monq-editor"
+command = "npm"
+args = [
+    "run", "dev"
+]
+
+[tasks.build-editor]
+description = "Build monq editor"
+workspace = false
+cwd = "./monq-editor"
+command = "npm"
+args = [
+    "run", "build"
+]
+
+[tasks.start-editor]
+description = "Start monq editor"
+workspace = false
+cwd = "./monq-editor"
+command = "npm"
+args = [
+    "start"
+]
