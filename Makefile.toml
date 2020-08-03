@@ -164,3 +164,12 @@ command = "npm"
 args = [
     "run", "build"
 ]
+
+[tasks.start-editor]
+description = "Start monq editor"
+workspace = false
+cwd = "./monq-editor"
+command = "npm"
+args = [
+    "start"
+]
