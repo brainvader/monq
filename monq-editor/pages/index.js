@@ -9,9 +9,6 @@ export default function Editor() {
     <Layout>
       <Head>
         <title>MonQ Editor</title>
-        <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.1/build/styles/default.min.css" />
-        <link rel="stylesheet"
-          href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.1.1/build/styles/monokai-sublime.min.css" />
       </Head>
       <Nav />
       <div className="py-20">
