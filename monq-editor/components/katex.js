@@ -6,7 +6,11 @@ function Katex({ source }) {
     const rawElement = useRef(null);
 
     useEffect(() => {
-        katex.render(source, rawElement.current);
+        katex.render(
+            source,
+            rawElement.current,
+            { displayMode: true }
+        );
     });
 
     return (
