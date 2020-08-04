@@ -34,20 +34,28 @@ export default function Editor() {
   return (
     <Layout>
       <Head>
-        <title>MonQ Editor</title>
+        <title>MonQ</title>
       </Head>
       <Nav />
       <div className="py-20">
         <h1 className="text-5xl text-center text-accent-1">
-          Next.js + Tailwind CSS
+          MonQはクイズ・ベースの学習システムです.
         </h1>
         <div className="flex justify-center leading-none text-2xl">
-          これがアイコンです<span><FaBeer className="bg-orange-500" /></span>
+          アイコンの表示:<span><FaBeer className="bg-orange-500" /></span>
+        </div>
+        <div>
+          こんな感じでコードを表示できます.
         </div>
         <div>
           <HighlightJS codeString={codeSample} language="rust" />
         </div>
-        <Katex source={mathExample} />
+        <div>
+          また数式も表示できます.
+        </div>
+        <div>
+          <Katex source={mathExample} />
+        </div>
       </div>
     </Layout>
   )
