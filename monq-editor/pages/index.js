@@ -34,7 +34,7 @@ export default function Editor() {
   return (
     <Layout>
       <Head>
-        <title>MonQ Editor</title>
+        <title>MonQ</title>
       </Head>
       <Nav />
       <div className="py-20">
