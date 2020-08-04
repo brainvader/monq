@@ -5,6 +5,7 @@ import Nav from '../components/nav'
 import { FaBeer } from 'react-icons/fa';
 
 import HighlightJS from '../components/highlightjs'
+import Katex from '../components/katex'
 
 const codeSample = `#[derive(Debug)]
 pub enum State {
@@ -23,6 +24,12 @@ impl From<&'a str> for State {
     }
 }`
 
+const mathExample = `
+\\begin{aligned}
+  E=m
+\\end{aligned}
+`;
+
 export default function Editor() {
   return (
     <Layout>
@@ -40,6 +47,7 @@ export default function Editor() {
         <div>
           <HighlightJS codeString={codeSample} language="rust" />
         </div>
+        <Katex source={mathExample} />
       </div>
     </Layout>
   )
