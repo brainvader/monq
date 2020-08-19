@@ -13,6 +13,7 @@
     "next": "9.3.5",
     "postcss-flexbugs-fixes": "^4.2.1",
     "postcss-preset-env": "^6.7.0",
+    "ra-data-json-server": "^3.8.0",
     "react": "16.13.1",
     "react-admin": "^3.8.1",
     "react-dom": "16.13.1",
