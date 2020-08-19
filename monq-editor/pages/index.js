@@ -45,6 +45,13 @@ const authProvider = {
   }
 }
 
+const fetchJson = (url, options = {}) => {
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: 'application/vnd.github.v3+json' })
+  }
+  return fetchUtils.fetchJson(url, options)
+}
+
   return (
     <Layout>
       <Head>
