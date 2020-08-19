@@ -7,6 +7,7 @@ import { FaBeer } from 'react-icons/fa';
 import HighlightJS from '../components/highlightjs'
 import Katex from '../components/katex'
 
+import { Admin } from 'react-admin'
 import { fetchUtils } from 'react-admin'
 import jsonServerProvider from 'ra-data-json-server'
 
@@ -66,11 +67,12 @@ function Loading() {
   return <div>Loading...</div>
 }
 
+function Done() {
   return (
-    <Layout>
-      <Head>
-        <title>MonQ</title>
-      </Head>
+    <Admin dataProvider={dataProvider}></Admin>
+  )
+}
+
       <Nav />
       <div className="py-20">
         <h1 className="text-5xl text-center text-accent-1">
