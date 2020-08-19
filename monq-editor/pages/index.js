@@ -6,6 +6,7 @@ import { FaBeer } from 'react-icons/fa';
 
 import HighlightJS from '../components/highlightjs'
 import Katex from '../components/katex'
+import ClientSideOnlyRenderer from '../components/client-side-only-renderer'
 
 import { Admin } from 'react-admin'
 import { fetchUtils } from 'react-admin'
@@ -73,13 +74,13 @@ function Done() {
   )
 }
 
-      <Nav />
-      <div className="py-20">
-        <h1 className="text-5xl text-center text-accent-1">
-          MonQはクイズ・ベースの学習システムです.
-        </h1>
-        <div className="flex justify-center leading-none text-2xl">
-          アイコンの表示:<span><FaBeer className="bg-orange-500" /></span>
+export default function Editor({ isServer }) {
+  return (
+    < ClientSideOnlyRenderer
+      initialSsrDone={isServer}
+      renderDone={Done}
+      renderLoading={Loading}
+    />
         </div>
         <div>
           こんな感じでコードを表示できます.
