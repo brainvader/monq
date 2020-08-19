@@ -62,6 +62,10 @@ export async function getStaticProps({ req }) {
   };
 }
 
+function Loading() {
+  return <div>Loading...</div>
+}
+
   return (
     <Layout>
       <Head>
