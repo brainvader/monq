@@ -56,6 +56,12 @@ const fetchJson = (url, options = {}) => {
 
 const dataProvider = jsonServerProvider('https://api.github.com', fetchJson)
 
+export async function getStaticProps({ req }) {
+  return {
+    props: { isServer: !!req },
+  };
+}
+
   return (
     <Layout>
       <Head>
