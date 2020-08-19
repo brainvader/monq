@@ -7,6 +7,7 @@ import { FaBeer } from 'react-icons/fa';
 import HighlightJS from '../components/highlightjs'
 import Katex from '../components/katex'
 
+import { fetchUtils } from 'react-admin'
 const codeSample = `#[derive(Debug)]
 pub enum State {
     Start,
@@ -30,7 +31,20 @@ const mathExample = `
 \\end{aligned}
 `;
 
-export default function Editor() {
+const authProvider = {
+  login: ({ clientId, clientSecret }) => {
+    const request = new Request('https://github.com/login/oauth/authorize?client_id=0d12a9525a2fe2a02', {
+      method: 'GET',
+    });
+    return fetch(request)
+      .then(response => {
+        if (response.status < 200 || response.status >= 300) {
+          throw new Error(response.statusText)
+        }
+      });
+  }
+}
+
   return (
     <Layout>
       <Head>
