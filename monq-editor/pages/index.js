@@ -81,20 +81,5 @@ export default function Editor({ isServer }) {
       renderDone={Done}
       renderLoading={Loading}
     />
-        </div>
-        <div>
-          こんな感じでコードを表示できます.
-        </div>
-        <div>
-          <HighlightJS codeString={codeSample} language="rust" />
-        </div>
-        <div>
-          また数式も表示できます.
-        </div>
-        <div>
-          <Katex source={mathExample} />
-        </div>
-      </div>
-    </Layout>
   )
 }
