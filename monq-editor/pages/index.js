@@ -8,6 +8,8 @@ import HighlightJS from '../components/highlightjs'
 import Katex from '../components/katex'
 
 import { fetchUtils } from 'react-admin'
+import jsonServerProvider from 'ra-data-json-server'
+
 const codeSample = `#[derive(Debug)]
 pub enum State {
     Start,
@@ -51,6 +53,8 @@ const fetchJson = (url, options = {}) => {
   }
   return fetchUtils.fetchJson(url, options)
 }
+
+const dataProvider = jsonServerProvider('https://api.github.com', fetchJson)
 
   return (
     <Layout>
